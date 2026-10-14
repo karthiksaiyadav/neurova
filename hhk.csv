@@ -1,0 +1,72 @@
+timestamp,temperature,humidity,target,material,description,noise,environment_values_note
+2023-06-28 17:39:00,27.3,54.8,Tenebrio molitor,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-06-28 18:26:15,27.2,54.7,Tenebrio molitor larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-06-28 18:56:00,26.8,54.5,Tribolium confusum,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-06-28 19:07:00,26.8,57.2,Callosobruchus maculatus,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-06-28 20:21:00,27.5,55.0,Callosobruchus maculatus,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-06-28 20:35:00,27.3,55.8,Tribolium confusum,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-06-28 20:50:00,27.7,55.9,Tenebrio molitor larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-06-28 21:02:00,27.2,57.6,Tenebrio molitor,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-07-05 20:18:00,27.4,56.4,Callosobruchus maculatus,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-07-05 20:35:00,27.7,57.6,No Insects (Unconfirmed),Rice,,Silence,SIMULATED — not measured in source dataset
+2023-07-05 20:43:00,27.8,61.6,Tribolium confusum,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-11 15:20:00,27.8,60.0,No Insects (Unconfirmed),Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-11 15:35:00,27.8,57.2,Tribolium confusum,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-11 16:14:00,27.7,59.5,Tribolium confusum,Rice,4x,Silence,SIMULATED — not measured in source dataset
+2023-09-11 16:59:00,28.3,57.8,Tribolium confusum,Wheat Groats,,Silence,SIMULATED — not measured in source dataset
+2023-09-11 17:26:00,28.6,57.4,Tribolium confusum,Flour,,Silence,SIMULATED — not measured in source dataset
+2023-09-11 18:56:00,27.7,59.8,Tribolium confusum,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-22 16:11:00,27.9,57.2,No Insects (Unconfirmed),Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-22 16:45:00,28.0,62.5,Callosobruchus maculatus larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-22 17:10:00,28.4,59.2,Callosobruchus maculatus larvae,Rice,,Factory 1,SIMULATED — not measured in source dataset
+2023-09-22 17:13:00,28.8,62.0,Callosobruchus maculatus larvae,Rice,,Factory 2,SIMULATED — not measured in source dataset
+2023-09-22 17:15:00,28.5,60.7,Callosobruchus maculatus larvae,Rice,,Crowd,SIMULATED — not measured in source dataset
+2023-09-22 17:22:00,28.4,59.3,Callosobruchus maculatus,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-22 17:37:00,28.4,65.0,Callosobruchus maculatus,Rice,,Crowd,SIMULATED — not measured in source dataset
+2023-09-22 17:40:00,29.2,62.8,Callosobruchus maculatus,Rice,,Factory 2,SIMULATED — not measured in source dataset
+2023-09-22 17:46:00,29.0,63.7,Callosobruchus maculatus,Rice,,Factory 1,SIMULATED — not measured in source dataset
+2023-09-22 17:52:00,28.4,60.0,Tribolium confusum,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-22 18:30:00,28.5,62.7,Tribolium confusum,Rice,,Factory 1,SIMULATED — not measured in source dataset
+2023-09-22 18:36:00,28.8,61.4,Tribolium confusum,Rice,,Factory 2,SIMULATED — not measured in source dataset
+2023-09-22 18:41:00,28.7,59.7,Tribolium confusum,Rice,,Crowd,SIMULATED — not measured in source dataset
+2023-09-22 18:49:00,28.8,61.4,Tenebrio molitor larvae,Rice,,Crowd,SIMULATED — not measured in source dataset
+2023-09-22 18:53:00,29.4,64.7,Tenebrio molitor larvae,Rice,,Factory 1,SIMULATED — not measured in source dataset
+2023-09-22 18:55:00,29.7,61.3,Tenebrio molitor larvae,Rice,,Factory 2,SIMULATED — not measured in source dataset
+2023-09-22 18:59:00,28.6,66.3,Tenebrio molitor larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-22 19:02:00,28.7,63.7,Tenebrio molitor larvae,Rice,,Factory 2,SIMULATED — not measured in source dataset
+2023-09-22 19:07:00,29.6,62.4,Tenebrio molitor larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-26 15:55:00,29.2,66.3,No Insects (Unconfirmed),Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-26 16:12:00,29.6,66.5,No Insects (Unconfirmed),Rice,,Factory 1,SIMULATED — not measured in source dataset
+2023-09-26 16:25:00,29.8,66.2,No Insects (Unconfirmed),Rice,,Factory 2,SIMULATED — not measured in source dataset
+2023-09-26 16:36:00,30.0,66.1,No Insects (Unconfirmed),Rice,,Crowd,SIMULATED — not measured in source dataset
+2023-09-26 16:48:00,29.6,67.6,Tenebrio molitor larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-26 18:07:00,30.0,64.8,Callosobruchus maculatus larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-26 18:35:00,30.0,67.5,Callosobruchus maculatus,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-09-26 20:03:00,29.7,65.9,Tribolium confusum,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-10-06 15:58:00,29.8,69.3,Tenebrio molitor larvae,Rice,2x ,Silence,SIMULATED — not measured in source dataset
+2023-10-06 18:00:00,30.0,67.7,Callosobruchus maculatus,Rice,2x ,Silence,SIMULATED — not measured in source dataset
+2023-10-06 19:37:00,30.2,67.8,Tribolium confusum,Rice,2x ,Silence,SIMULATED — not measured in source dataset
+2023-10-06 20:25:00,29.7,67.9,Tribolium confusum,Rice,2x ,Silence,SIMULATED — not measured in source dataset
+2023-10-06 20:37:00,30.1,71.0,Tenebrio molitor larvae,Rice,2x ,Silence,SIMULATED — not measured in source dataset
+2023-10-17 16:38:00,30.3,70.8,No Insects (Unconfirmed),Rice,,Noise,SIMULATED — not measured in source dataset
+2023-10-17 17:07:00,29.8,68.1,Tenebrio molitor larvae,Rice,Drilling Noise,Silence,SIMULATED — not measured in source dataset
+2023-10-17 18:00:00,30.5,68.8,Tenebrio molitor larvae,Rice,Buried,Silence,SIMULATED — not measured in source dataset
+2023-10-17 19:17:00,30.2,70.8,Sweep,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-10-25 02:18:00,30.4,71.0,No Insects,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-10-25 15:49:00,31.1,69.4,No Insects,Wheat Groats,,Silence,SIMULATED — not measured in source dataset
+2023-10-25 19:31:00,30.3,71.3,No Insects,Wheat Groats,Tapping,Silence,SIMULATED — not measured in source dataset
+2023-10-25 19:44:00,30.9,70.7,No Insects,Wet Rice,,Silence,SIMULATED — not measured in source dataset
+2023-11-02 02:55:00,30.7,73.3,Silence,,,Silence,SIMULATED — not measured in source dataset
+2023-11-02 02:57:00,30.5,71.8,Talking,,,Talking,SIMULATED — not measured in source dataset
+2023-11-02 03:00:00,30.4,74.4,Tenebrio molitor larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-11-02 03:07:00,30.6,71.9,Tenebrio molitor larvae,Rice,,Talking,SIMULATED — not measured in source dataset
+2023-11-02 03:54:00,31.5,73.2,Silence,,,Silence,SIMULATED — not measured in source dataset
+2023-11-02 03:58:00,30.9,74.6,,,,Talking,SIMULATED — not measured in source dataset
+2023-11-02 04:01:00,31.1,73.1,Tenebrio molitor larvae,Rice,,Silence,SIMULATED — not measured in source dataset
+2023-11-02 04:07:00,31.4,74.1,Tenebrio molitor larvae,Rice,,Talking,SIMULATED — not measured in source dataset
+2023-11-07 19:22:00,31.0,75.4,Noise 60 dB,,,Noise,SIMULATED — not measured in source dataset
+2023-11-07 19:24:00,31.2,76.4,Noise 80 dB,,,Noise,SIMULATED — not measured in source dataset
+2023-11-07 19:26:00,31.2,75.4,Noise 70 dB,,,Noise,SIMULATED — not measured in source dataset
+2023-11-07 19:29:00,31.8,77.8,Noise 90 dB,,,Noise,SIMULATED — not measured in source dataset
+2023-11-07 19:32:00,31.2,79.6,Noise 100 dB,,,Noise,SIMULATED — not measured in source dataset
+2023-12-17 22:04:00,31.8,76.4,Ronald Reagan Speech,,,Noise,SIMULATED — not measured in source dataset
