@@ -1,0 +1,164 @@
+Here's the full working code of the Upload CSV page (`src/routes/_app/upload.jsx`):
+
+```jsx
+import { useMemo, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { ArrowRight, DatabaseZap, UploadCloud } from "lucide-react";
+import { DatasetGate } from "@/components/common/DatasetGate";
+import { SectionCard } from "@/components/common/SectionCard";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { StatusPill } from "@/components/layout/StatusPill";
+import { ColumnMappingForm } from "@/components/upload/ColumnMappingForm";
+import { CsvDropzone } from "@/components/upload/CsvDropzone";
+import { DataPreviewTable } from "@/components/upload/DataPreviewTable";
+import { ValidationReport } from "@/components/upload/ValidationReport";
+import { Button } from "@/components/ui/button";
+import { useDataset } from "@/lib/dataset/DatasetContext";
+import { autoMap, normalizeRows, parseCsv } from "@/lib/grain/csv";
+import { SAMPLE_LABEL, SAMPLE_NOTES } from "@/lib/grain/sample";
+
+const MAX_BYTES = 20 * 1024 * 1024;
+
+export const Route = createFileRoute("/_app/upload")({
+  head: () => ({
+    meta: [
+      { title: "Upload CSV — NEUROVA CSV Lab" },
+      { name: "description", content: "Import grain-storage monitoring data with column alias mapping, validation and missing-value reporting." },
+    ],
+  }),
+  component: UploadPage,
+});
+
+function UploadPage() {
+  const navigate = useNavigate();
+  const { loadCsv, loadSample } = useDataset();
+  const [parsed, setParsed] = useState(null);
+  const [mapping, setMapping] = useState({});
+  const [error, setError] = useState(null);
+  const [busy, setBusy] = useState(false);
+
+  const normalized = useMemo(
+    () => (parsed ? normalizeRows(parsed.rows, parsed.headers, mapping) : null),
+    [parsed, mapping],
+  );
+
+  const blockers = normalized ? normalized.issues.filter((issue) => issue.level === "error") : [];
+
+  const handleFile = async (file) => {
+    setError(null);
+    if (file.size > MAX_BYTES) {
+      setError("That file is larger than the 20 MB limit.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const text = await file.text();
+      const result = parseCsv(text);
+      if (!result.headers.length || !result.rows.length) {
+        setError("No header row and data rows could be found in that file.");
+        return;
+      }
+      setParsed({ fileName: file.name, ...result });
+      setMapping(autoMap(result.headers));
+    } catch {
+      setError("That file could not be read. A plain CSV, tab or semicolon delimited file works best.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleLoad = () => {
+    if (!normalized || blockers.length) return;
+    loadCsv({ rows: normalized.rows, mapping, fileName: parsed.fileName, stats: normalized.stats });
+    navigate({ to: "/dashboard" });
+  };
+
+  const handleSample = () => {
+    loadSample();
+    navigate({ to: "/dashboard" });
+  };
+
+  return (
+    <div className="mx-auto max-w-5xl">
+      <PageHeader
+        title="Upload CSV"
+        subtitle="Bring in grain-storage readings from a logger export, or start from the built-in sample dataset."
+      >
+        <StatusPill />
+      </PageHeader>
+
+      <DatasetGate title="Nothing imported yet" description="Drop a CSV above to map its columns, or load the sample dataset.">
+        <div className="space-y-4">
+          <CsvDropzone onFile={handleFile} busy={busy} fileName={parsed?.fileName} />
+
+          {error ? (
+            <p className="rounded-xl border border-destructive bg-destructive-soft px-4 py-3 text-xs text-destructive-foreground">{error}</p>
+          ) : null}
+
+          {parsed ? (
+            <>
+              <SectionCard
+                title="Column alias mapping"
+                description="Header names are matched automatically. Adjust anything the file names differently — the mapping applies to every reading."
+              >
+                <ColumnMappingForm
+                  headers={parsed.headers}
+                  mapping={mapping}
+                  onChange={(key, value) => setMapping((current) => ({ ...current, [key]: value }))}
+                />
+              </SectionCard>
+
+              <SectionCard title="Validation & missing values" description="What the importer saw, including every value it did not receive.">
+                <ValidationReport issues={normalized.issues} stats={normalized.stats} missing={normalized.missing} />
+              </SectionCard>
+
+              <SectionCard title="Preview" description="The first readings after mapping.">
+                <DataPreviewTable rows={normalized.rows} />
+              </SectionCard>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Button onClick={handleLoad} disabled={Boolean(blockers.length)}>
+                  <ArrowRight className="h-4 w-4" />
+                  Run the analysis
+                </Button>
+                <span className="text-[11px] text-muted-foreground">
+                  {blockers.length ? blockers[0].message : "Scoring happens in this browser — nothing is uploaded to a server."}
+                </span>
+              </div>
+            </>
+          ) : null}
+
+          <SectionCard
+            title="No sensor handy?"
+            description="The sample dataset is generated in your browser so every page of the lab can be demonstrated without hardware."
+          >
+            <ul className="space-y-2">
+              {SAMPLE_NOTES.map((note) => (
+                <li key={note} className="flex gap-2.5 text-xs text-muted-foreground">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  {note}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Button variant="outline" onClick={handleSample}>
+                <DatabaseZap className="h-4 w-4" />
+                Load Sample Dataset
+              </Button>
+              <span className="rounded-full border border-warning bg-warning-soft px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-warning-foreground">
+                {SAMPLE_LABEL}
+              </span>
+            </div>
+          </SectionCard>
+
+          <p className="flex items-center gap-2 text-[11px] text-muted-foreground">
+            <UploadCloud className="h-3.5 w-3.5" />
+            Files are read locally with the browser's file reader. The dataset stays in this browser and never mixes with live
+            or sample data.
+          </p>
+        </div>
+      </DatasetGate>
+    </div>
+  );
+}
+```
