@@ -1,0 +1,3738 @@
+NEUROVA - Raw Paddy Rice Storage Monitor
+Complete Source Code - All Files
+============================================
+
+
+============================================
+FILE: index.html
+============================================
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEUROVA CSV Lab — Grain Storage Monitoring</title>
+    <meta name="description" content="Import, validate and score grain-storage sensor data entirely in your browser." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+============================================
+FILE: package.json
+============================================
+
+{
+  "name": "vite-react-typescript-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
+    "lucide-react": "^0.446.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2"
+  }
+}
+
+
+============================================
+FILE: vite.config.ts
+============================================
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath, URL } from 'node:url';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  optimizeDeps: {
+    exclude: ['lucide-react'],
+  },
+});
+
+
+============================================
+FILE: tailwind.config.js
+============================================
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#fefce8',
+          100: '#fef9c3',
+          200: '#fef08a',
+          300: '#fde047',
+          400: '#facc15',
+          500: '#eab308',
+          600: '#ca8a04',
+          700: '#a16207',
+          800: '#854d0e',
+          900: '#713f12',
+          950: '#422006',
+        },
+        secondary: {
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#0f172a',
+          950: '#020617',
+        },
+        accent: {
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#14b8a6',
+          600: '#0d9488',
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a',
+          950: '#042f2e',
+        },
+        success: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          soft: '#dcfce7',
+          foreground: '#15803d',
+        },
+        warning: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+          soft: '#fef3c7',
+          foreground: '#b45309',
+        },
+        destructive: {
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+          soft: '#fee2e2',
+          foreground: '#b91c1c',
+        },
+        border: 'hsl(200 20% 90%)',
+        muted: {
+          DEFAULT: '#f8fafc',
+          foreground: '#64748b',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+      borderRadius: {
+        xl: '0.875rem',
+        '2xl': '1.25rem',
+      },
+    },
+  },
+  plugins: [],
+};
+
+
+============================================
+FILE: postcss.config.js
+============================================
+
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+
+============================================
+FILE: tsconfig.json
+============================================
+
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+
+============================================
+FILE: tsconfig.app.json
+============================================
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Path alias — depth-invariant imports for src (@/foo === src/foo from any file) */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}
+
+
+============================================
+FILE: eslint.config.js
+============================================
+
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  }
+);
+
+
+============================================
+FILE: src/main.tsx
+============================================
+
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+
+============================================
+FILE: src/App.tsx
+============================================
+
+import { useState } from "react";
+import { AppShell } from "@/components/layout/AppShell";
+import { DatasetProvider } from "@/lib/dataset/DatasetContext";
+import { UploadPage } from "@/pages/UploadPage";
+import { DashboardPage } from "@/pages/DashboardPage";
+import { BinsPage } from "@/pages/BinsPage";
+import { TrendsPage } from "@/pages/TrendsPage";
+import { LivePage } from "@/pages/LivePage";
+
+function AppContent() {
+  const [page, setPage] = useState("upload");
+
+  const navigate = (p: string) => {
+    setPage(p);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <AppShell currentPage={page} onNavigate={navigate}>
+      {page === "upload" ? <UploadPage onNavigate={navigate} /> : null}
+      {page === "dashboard" ? <DashboardPage onNavigate={navigate} /> : null}
+      {page === "bins" ? <BinsPage onNavigate={navigate} /> : null}
+      {page === "trends" ? <TrendsPage onNavigate={navigate} /> : null}
+      {page === "live" ? <LivePage onNavigate={navigate} /> : null}
+    </AppShell>
+  );
+}
+
+export default function App() {
+  return (
+    <DatasetProvider>
+      <AppContent />
+    </DatasetProvider>
+  );
+}
+
+
+============================================
+FILE: src/index.css
+============================================
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: theme('colors.border');
+  }
+  body {
+    font-family: theme('fontFamily.sans');
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+
+============================================
+FILE: src/vite-env.d.ts
+============================================
+
+/// <reference types="vite/client" />
+
+
+============================================
+FILE: src/lib/supabaseClient.ts
+============================================
+
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export interface SensorReading {
+  id: number;
+  device_id: string;
+  temperature: number | null;
+  humidity: number | null;
+  vibration_amplitude: number | null;
+  vibration_event: boolean;
+  temperature_warning: boolean;
+  humidity_warning: boolean;
+  total_risk: number | null;
+  risk_alert: boolean;
+  created_at: string;
+}
+
+export const ALERT_THRESHOLDS = {
+  tempWarning: 35.0,
+  rhWarning: 65.0,
+  rhHigh: 75.0,
+  piezoEventThreshold: 250,
+  riskAlertLimit: 30.0,
+};
+
+export function computeAlerts(r: SensorReading): SensorReading {
+  const temperatureWarning =
+    r.temperature !== null && r.temperature > ALERT_THRESHOLDS.tempWarning;
+  const humidityWarning =
+    r.humidity !== null && r.humidity > ALERT_THRESHOLDS.rhWarning;
+  const vibrationEvent =
+    r.vibration_event ||
+    (r.vibration_amplitude !== null && r.vibration_amplitude >= ALERT_THRESHOLDS.piezoEventThreshold);
+  const riskAlert =
+    r.risk_alert ||
+    (r.total_risk !== null && r.total_risk > ALERT_THRESHOLDS.riskAlertLimit);
+
+  return {
+    ...r,
+    temperature_warning: temperatureWarning,
+    humidity_warning: humidityWarning,
+    vibration_event: vibrationEvent,
+    risk_alert: riskAlert,
+  };
+}
+
+
+============================================
+FILE: src/lib/dataset/DatasetContext.tsx
+============================================
+
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import type { GrainColumn, NormalizeResult } from "@/lib/grain/csv";
+import { generateSampleData } from "@/lib/grain/sample";
+import type { OverallScore } from "@/lib/grain/scoring";
+import { scoreDataset } from "@/lib/grain/scoring";
+
+interface DatasetState {
+  rows: NormalizeResult["rows"];
+  mapping: Record<string, GrainColumn | "">;
+  fileName: string | null;
+  stats: NormalizeResult["stats"];
+  isLoaded: boolean;
+  isSample: boolean;
+}
+
+interface DatasetContextValue extends DatasetState {
+  loadCsv: (data: { rows: NormalizeResult["rows"]; mapping: Record<string, GrainColumn | "">; fileName: string; stats: NormalizeResult["stats"] }) => void;
+  loadSample: () => void;
+  clear: () => void;
+  score: OverallScore | null;
+}
+
+const DatasetContext = createContext<DatasetContextValue | null>(null);
+
+const emptyState: DatasetState = {
+  rows: [],
+  mapping: {},
+  fileName: null,
+  stats: {},
+  isLoaded: false,
+  isSample: false,
+};
+
+export function DatasetProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<DatasetState>(emptyState);
+
+  const loadCsv = useCallback((data: { rows: NormalizeResult["rows"]; mapping: Record<string, GrainColumn | "">; fileName: string; stats: NormalizeResult["stats"] }) => {
+    setState({
+      rows: data.rows,
+      mapping: data.mapping,
+      fileName: data.fileName,
+      stats: data.stats,
+      isLoaded: true,
+      isSample: false,
+    });
+  }, []);
+
+  const loadSample = useCallback(() => {
+    const rows = generateSampleData();
+    setState({
+      rows,
+      mapping: {},
+      fileName: "sample-dataset.csv",
+      stats: {},
+      isLoaded: true,
+      isSample: true,
+    });
+  }, []);
+
+  const clear = useCallback(() => setState(emptyState), []);
+
+  const score = useMemo(() => (state.rows.length > 0 ? scoreDataset(state.rows) : null), [state.rows]);
+
+  const value = useMemo<DatasetContextValue>(
+    () => ({ ...state, loadCsv, loadSample, clear, score }),
+    [state, loadCsv, loadSample, clear, score],
+  );
+
+  return <DatasetContext.Provider value={value}>{children}</DatasetContext.Provider>;
+}
+
+export function useDataset() {
+  const ctx = useContext(DatasetContext);
+  if (!ctx) throw new Error("useDataset must be used within a DatasetProvider");
+  return ctx;
+}
+
+
+============================================
+FILE: src/lib/grain/csv.ts
+============================================
+
+export type GrainColumn =
+  | "timestamp"
+  | "sensor_id"
+  | "temperature"
+  | "humidity";
+
+export const COLUMN_LABELS: Record<GrainColumn, string> = {
+  timestamp: "Timestamp",
+  sensor_id: "Sensor / Bin ID",
+  temperature: "Temperature (°C)",
+  humidity: "Ambient Humidity (%)",
+};
+
+export const COLUMN_ALIASES: Record<GrainColumn, string[]> = {
+  timestamp: ["timestamp", "time", "date", "datetime", "reading_time", "recorded_at", "ts"],
+  sensor_id: ["sensor_id", "sensor", "bin_id", "bin", "location", "silo", "probe", "node", "device_id"],
+  temperature: ["temperature", "temp", "temperature_c", "temp_c", "grain_temp", "probe_temp"],
+  humidity: ["humidity", "ambient_humidity", "rh", "relative_humidity", "air_humidity"],
+};
+
+export const ALL_COLUMNS: GrainColumn[] = ["timestamp", "sensor_id", "temperature", "humidity"];
+
+export const REQUIRED_COLUMNS: GrainColumn[] = ["timestamp", "sensor_id", "temperature"];
+
+export interface CsvParseResult {
+  headers: string[];
+  rows: string[][];
+}
+
+export interface ValidationIssue {
+  level: "error" | "warning";
+  message: string;
+  row?: number;
+  column?: GrainColumn;
+}
+
+export interface ColumnStats {
+  count: number;
+  min: number | null;
+  max: number | null;
+  mean: number | null;
+  unit: string;
+}
+
+export interface NormalizedRow {
+  timestamp: string;
+  sensor_id: string;
+  temperature: number | null;
+  humidity: number | null;
+}
+
+export interface NormalizeResult {
+  rows: NormalizedRow[];
+  issues: ValidationIssue[];
+  stats: Partial<Record<GrainColumn, ColumnStats>>;
+  missing: Partial<Record<GrainColumn, number>>;
+}
+
+function detectDelimiter(text: string): string {
+  const firstLine = text.split(/\r?\n/)[0] ?? "";
+  const candidates = [",", "\t", ";", "|"];
+  let best = ",";
+  let bestCount = 0;
+  for (const d of candidates) {
+    const count = firstLine.split(d).length - 1;
+    if (count > bestCount) {
+      best = d;
+      bestCount = count;
+    }
+  }
+  return best;
+}
+
+function parseLine(line: string, delimiter: string): string[] {
+  const result: string[] = [];
+  let current = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (line[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        current += ch;
+      }
+    } else {
+      if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === delimiter) {
+        result.push(current.trim());
+        current = "";
+      } else {
+        current += ch;
+      }
+    }
+  }
+  result.push(current.trim());
+  return result;
+}
+
+export function parseCsv(text: string): CsvParseResult {
+  const delimiter = detectDelimiter(text);
+  const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
+  if (lines.length === 0) return { headers: [], rows: [] };
+  const headers = parseLine(lines[0], delimiter);
+  const rows = lines.slice(1).map((l) => parseLine(l, delimiter));
+  return { headers, rows };
+}
+
+export function normalizeHeader(h: string): string {
+  return h.toLowerCase().replace(/[\s\-._]/g, "_").replace(/[^a-z0-9_]/g, "");
+}
+
+export function autoMap(headers: string[]): Record<string, GrainColumn | ""> {
+  const mapping: Record<string, GrainColumn | ""> = {};
+  const used = new Set<GrainColumn>();
+
+  for (const header of headers) {
+    const normalized = normalizeHeader(header);
+    let matched: GrainColumn | "" = "";
+
+    for (const col of ALL_COLUMNS) {
+      if (used.has(col)) continue;
+      const aliases = COLUMN_ALIASES[col].map(normalizeHeader);
+      if (aliases.includes(normalized)) {
+        matched = col;
+        break;
+      }
+    }
+
+    if (!matched) {
+      for (const col of ALL_COLUMNS) {
+        if (used.has(col)) continue;
+        const aliases = COLUMN_ALIASES[col].map(normalizeHeader);
+        if (aliases.some((a) => normalized.includes(a) || a.includes(normalized))) {
+          matched = col;
+          break;
+        }
+      }
+    }
+
+    if (matched) used.add(matched);
+    mapping[header] = matched;
+  }
+
+  return mapping;
+}
+
+function parseNumber(value: string): number | null {
+  if (!value || value.trim() === "") return null;
+  const cleaned = value.replace(/[^0-9.\-+eE]/g, "");
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? null : n;
+}
+
+const COLUMN_UNITS: Record<GrainColumn, string> = {
+  timestamp: "",
+  sensor_id: "",
+  temperature: "°C",
+  humidity: "%",
+};
+
+const COLUMN_RANGES: Partial<Record<GrainColumn, { min: number; max: number }>> = {
+  temperature: { min: -40, max: 80 },
+  humidity: { min: 0, max: 100 },
+};
+
+function computeStats(values: number[]): ColumnStats {
+  const valid = values.filter((v) => v !== null && !isNaN(v)) as number[];
+  if (valid.length === 0) {
+    return { count: 0, min: null, max: null, mean: null, unit: "" };
+  }
+  const sum = valid.reduce((a, b) => a + b, 0);
+  const col = Object.keys(COLUMN_RANGES).find(() => true);
+  return {
+    count: valid.length,
+    min: Math.min(...valid),
+    max: Math.max(...valid),
+    mean: sum / valid.length,
+    unit: col ? COLUMN_UNITS[col as GrainColumn] : "",
+  };
+}
+
+export function normalizeRows(
+  rows: string[][],
+  headers: string[],
+  mapping: Record<string, GrainColumn | "">,
+): NormalizeResult {
+  const issues: ValidationIssue[] = [];
+  const missing: Partial<Record<GrainColumn, number>> = {};
+  const numericValues: Partial<Record<GrainColumn, number[]>> = {};
+
+  for (const col of ALL_COLUMNS) {
+    missing[col] = 0;
+    numericValues[col] = [];
+  }
+
+  for (const required of REQUIRED_COLUMNS) {
+    const hasMapping = Object.values(mapping).includes(required);
+    if (!hasMapping) {
+      issues.push({
+        level: "error",
+        message: `Required column "${COLUMN_LABELS[required]}" is not mapped. Assign it in the mapping above.`,
+        column: required,
+      });
+    }
+  }
+
+  const normalizedRows: NormalizedRow[] = rows.map((rawRow, rowIdx) => {
+    const rowMap: Record<string, string> = {};
+    headers.forEach((h, i) => {
+      rowMap[h] = rawRow[i] ?? "";
+    });
+
+    const get = (col: GrainColumn): string => {
+      const header = Object.entries(mapping).find(([, v]) => v === col)?.[0];
+      return header ? rowMap[header] ?? "" : "";
+    };
+
+    const timestamp = get("timestamp");
+    const sensor_id = get("sensor_id");
+    const tempStr = get("temperature");
+    const humidStr = get("humidity");
+
+    if (!timestamp) missing.timestamp!++;
+    if (!sensor_id) missing.sensor_id!++;
+    if (!tempStr) missing.temperature!++;
+
+    const temperature = parseNumber(tempStr);
+    const humidity = parseNumber(humidStr);
+
+    if (temperature !== null) numericValues.temperature!.push(temperature);
+    if (humidity !== null) numericValues.humidity!.push(humidity);
+
+    const rowNum = rowIdx + 1;
+
+    for (const [col, value] of [
+      ["temperature", temperature],
+      ["humidity", humidity],
+    ] as [GrainColumn, number | null][]) {
+      const range = COLUMN_RANGES[col];
+      if (range && value !== null) {
+        if (value < range.min || value > range.max) {
+          issues.push({
+            level: "warning",
+            message: `Row ${rowNum}: ${COLUMN_LABELS[col]} value ${value}${COLUMN_UNITS[col]} is outside the expected range (${range.min}–${range.max}).`,
+            row: rowNum,
+            column: col,
+          });
+        }
+      }
+    }
+
+    if (REQUIRED_COLUMNS.includes("timestamp") && !timestamp) {
+      issues.push({
+        level: "error",
+        message: `Row ${rowNum}: Missing timestamp.`,
+        row: rowNum,
+        column: "timestamp",
+      });
+    }
+
+    if (REQUIRED_COLUMNS.includes("sensor_id") && !sensor_id) {
+      issues.push({
+        level: "warning",
+        message: `Row ${rowNum}: Missing sensor/bin ID.`,
+        row: rowNum,
+        column: "sensor_id",
+      });
+    }
+
+    return { timestamp, sensor_id, temperature, humidity };
+  });
+
+  const stats: Partial<Record<GrainColumn, ColumnStats>> = {};
+  for (const col of ["temperature", "humidity"] as GrainColumn[]) {
+    stats[col] = {
+      ...computeStats(numericValues[col]!),
+      unit: COLUMN_UNITS[col],
+    };
+  }
+
+  return { rows: normalizedRows, issues, stats, missing };
+}
+
+
+============================================
+FILE: src/lib/grain/scoring.ts
+============================================
+
+import type { NormalizedRow } from "./csv";
+
+export interface BinScore {
+  sensor_id: string;
+  overall: number;
+  temperature: number;
+  humidity: number;
+  riskLevel: "safe" | "caution" | "warning" | "critical";
+  readingCount: number;
+  latestReading: NormalizedRow;
+  avgTemp: number | null;
+  avgHumidity: number | null;
+  maxTemp: number | null;
+  maxHumidity: number | null;
+  trend: "stable" | "rising" | "falling";
+}
+
+export interface OverallScore {
+  overall: number;
+  bins: BinScore[];
+  totalReadings: number;
+  safeBins: number;
+  cautionBins: number;
+  warningBins: number;
+  criticalBins: number;
+  worstBin: BinScore | null;
+}
+
+function scoreTemperature(avg: number | null, max: number | null): number {
+  if (avg === null) return 50;
+  let score = 100;
+  if (avg > 15) score -= (avg - 15) * 4;
+  if (avg > 25) score -= (avg - 25) * 6;
+  if (max !== null && max > 30) score -= (max - 30) * 3;
+  return Math.max(0, Math.min(100, score));
+}
+
+function scoreHumidity(avg: number | null, max: number | null): number {
+  if (avg === null) return 50;
+  let score = 100;
+  if (avg > 55) score -= (avg - 55) * 1.5;
+  if (avg > 65) score -= (avg - 65) * 2.5;
+  if (avg > 75) score -= (avg - 75) * 3;
+  if (max !== null && max > 80) score -= (max - 80) * 2;
+  return Math.max(0, Math.min(100, score));
+}
+
+function riskFromScore(score: number): "safe" | "caution" | "warning" | "critical" {
+  if (score >= 80) return "safe";
+  if (score >= 60) return "caution";
+  if (score >= 40) return "warning";
+  return "critical";
+}
+
+function detectTrend(rows: NormalizedRow[]): "stable" | "rising" | "falling" {
+  if (rows.length < 4) return "stable";
+  const quarter = Math.floor(rows.length / 4);
+  const first = rows.slice(0, quarter);
+  const last = rows.slice(-quarter);
+  const avgFirst = avg(first.map((r) => r.temperature).filter((v): v is number => v !== null));
+  const avgLast = avg(last.map((r) => r.temperature).filter((v): v is number => v !== null));
+  if (avgFirst === null || avgLast === null) return "stable";
+  const diff = avgLast - avgFirst;
+  if (diff > 1.5) return "rising";
+  if (diff < -1.5) return "falling";
+  return "stable";
+}
+
+function avg(nums: number[]): number | null {
+  if (nums.length === 0) return null;
+  return nums.reduce((a, b) => a + b, 0) / nums.length;
+}
+
+export function scoreDataset(rows: NormalizedRow[]): OverallScore {
+  const byBin = new Map<string, NormalizedRow[]>();
+  for (const row of rows) {
+    if (!row.sensor_id) continue;
+    const existing = byBin.get(row.sensor_id) ?? [];
+    existing.push(row);
+    byBin.set(row.sensor_id, existing);
+  }
+
+  const bins: BinScore[] = [];
+
+  for (const [sensorId, binRows] of byBin) {
+    const temps = binRows.map((r) => r.temperature).filter((v): v is number => v !== null);
+    const humidities = binRows.map((r) => r.humidity).filter((v): v is number => v !== null);
+
+    const avgTemp = avg(temps);
+    const avgHumidity = avg(humidities);
+    const maxTemp = temps.length ? Math.max(...temps) : null;
+    const maxHumidity = humidities.length ? Math.max(...humidities) : null;
+
+    const tempScore = scoreTemperature(avgTemp, maxTemp);
+    const humidScore = scoreHumidity(avgHumidity, maxHumidity);
+
+    const overall = Math.round((tempScore * 0.55 + humidScore * 0.45));
+
+    bins.push({
+      sensor_id: sensorId,
+      overall,
+      temperature: Math.round(tempScore),
+      humidity: Math.round(humidScore),
+      riskLevel: riskFromScore(overall),
+      readingCount: binRows.length,
+      latestReading: binRows[binRows.length - 1],
+      avgTemp: avgTemp !== null ? parseFloat(avgTemp.toFixed(1)) : null,
+      avgHumidity: avgHumidity !== null ? parseFloat(avgHumidity.toFixed(1)) : null,
+      maxTemp: maxTemp !== null ? parseFloat(maxTemp.toFixed(1)) : null,
+      maxHumidity: maxHumidity !== null ? parseFloat(maxHumidity.toFixed(1)) : null,
+      trend: detectTrend(binRows),
+    });
+  }
+
+  bins.sort((a, b) => a.overall - b.overall);
+
+  const safeBins = bins.filter((b) => b.riskLevel === "safe").length;
+  const cautionBins = bins.filter((b) => b.riskLevel === "caution").length;
+  const warningBins = bins.filter((b) => b.riskLevel === "warning").length;
+  const criticalBins = bins.filter((b) => b.riskLevel === "critical").length;
+
+  const overallScore = bins.length > 0
+    ? Math.round(bins.reduce((sum, b) => sum + b.overall, 0) / bins.length)
+    : 0;
+
+  return {
+    overall: overallScore,
+    bins,
+    totalReadings: rows.length,
+    safeBins,
+    cautionBins,
+    warningBins,
+    criticalBins,
+    worstBin: bins[0] ?? null,
+  };
+}
+
+
+============================================
+FILE: src/lib/grain/sample.ts
+============================================
+
+import type { NormalizedRow } from "./csv";
+import { normalizeRows, autoMap, parseCsv } from "./csv";
+
+export const SAMPLE_LABEL = "12 bins · 7 days · 10-min interval";
+export const SAMPLE_NOTES = [
+  "Twelve storage bins across two sites with realistic temperature and humidity drift.",
+  "Readings every 10 minutes for 7 days — 12 096 rows in total.",
+  "Two bins are deliberately degrading to show how the scoring flags risk early.",
+  "Everything is generated in your browser, so the sample never touches a server.",
+];
+
+function seededRandom(seed: number): () => number {
+  let s = seed;
+  return () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+}
+
+const BIN_NAMES = [
+  "BIN-A1", "BIN-A2", "BIN-A3", "BIN-A4",
+  "BIN-A5", "BIN-A6", "BIN-B1", "BIN-B2",
+  "BIN-B3", "BIN-B4", "BIN-B5", "BIN-B6",
+];
+
+export function generateSampleData(): NormalizedRow[] {
+  const rand = seededRandom(42);
+  const rows: NormalizedRow[] = [];
+  const startDate = new Date("2025-09-01T00:00:00Z");
+  const intervalMin = 10;
+  const totalDays = 7;
+  const readingsPerBin = (totalDays * 24 * 60) / intervalMin;
+
+  for (let b = 0; b < BIN_NAMES.length; b++) {
+    const bin = BIN_NAMES[b];
+    const baseTemp = 14 + rand() * 8;
+    const baseHumidity = 45 + rand() * 20;
+
+    const degrading = b === 4 || b === 9;
+
+    for (let r = 0; r < readingsPerBin; r++) {
+      const ts = new Date(startDate.getTime() + r * intervalMin * 60 * 1000);
+      const dayProgress = r / readingsPerBin;
+
+      const diurnal = Math.sin((r / readingsPerBin) * Math.PI * 2 * 7) * 2;
+
+      let temp = baseTemp + diurnal + (rand() - 0.5) * 1.5;
+      let humidity = baseHumidity + (rand() - 0.5) * 5;
+
+      if (degrading) {
+        temp += dayProgress * 16;
+        humidity += dayProgress * 18;
+      }
+
+      rows.push({
+        timestamp: ts.toISOString(),
+        sensor_id: bin,
+        temperature: parseFloat(temp.toFixed(1)),
+        humidity: parseFloat(humidity.toFixed(1)),
+      });
+    }
+  }
+
+  return rows;
+}
+
+export function generateSampleCsv(): string {
+  const rows = generateSampleData();
+  const headers = ["timestamp", "sensor_id", "temperature", "humidity"];
+  const lines = [headers.join(",")];
+  for (const row of rows) {
+    lines.push([row.timestamp, row.sensor_id, row.temperature, row.humidity].join(","));
+  }
+  return lines.join("\n");
+}
+
+export function loadSampleAsParsed() {
+  const csv = generateSampleCsv();
+  const parsed = parseCsv(csv);
+  const mapping = autoMap(parsed.headers);
+  const normalized = normalizeRows(parsed.rows, parsed.headers, mapping);
+  return { parsed, mapping, normalized };
+}
+
+
+============================================
+FILE: src/components/layout/AppShell.tsx
+============================================
+
+import { Wheat } from "lucide-react";
+import type { ReactNode } from "react";
+import { useDataset } from "@/lib/dataset/DatasetContext";
+import { StatusPill } from "./StatusPill";
+
+interface NavItem {
+  label: string;
+  page: string;
+  icon: ReactNode;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "Upload", page: "upload", icon: <UploadIcon /> },
+  { label: "Live", page: "live", icon: <LiveIcon /> },
+  { label: "Dashboard", page: "dashboard", icon: <DashboardIcon /> },
+  { label: "Bins", page: "bins", icon: <BinsIcon /> },
+  { label: "Trends", page: "trends", icon: <TrendsIcon /> },
+];
+
+function UploadIcon() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.9 5 5 0 019.9-1.1A4.5 4.5 0 0117 16M9 13l3-3 3 3M12 10v8" />
+    </svg>
+  );
+}
+
+function DashboardIcon() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM14 13a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6zM4 17a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1v-2z" />
+    </svg>
+  );
+}
+
+function BinsIcon() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 9l9-6 9 6M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9M9 20v-6h6v6" />
+    </svg>
+  );
+}
+
+function LiveIcon() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12h2l2-6 4 12 2-6h2l2 3h4" />
+    </svg>
+  );
+}
+
+function TrendsIcon() {
+  return (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 17l6-6 4 4 7-7M17 8h4v4" />
+    </svg>
+  );
+}
+
+interface AppShellProps {
+  currentPage: string;
+  onNavigate: (page: string) => void;
+  children: ReactNode;
+}
+
+export function AppShell({ currentPage, onNavigate, children }: AppShellProps) {
+  const { isLoaded } = useDataset();
+
+  return (
+    <div className="min-h-screen bg-secondary-50">
+      <header className="sticky top-0 z-30 border-b border-secondary-200 bg-white/90 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4 sm:px-6">
+          <button
+            onClick={() => onNavigate("upload")}
+            className="flex items-center gap-2 transition-opacity hover:opacity-80"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-white">
+              <Wheat className="h-4 w-4" />
+            </div>
+            <span className="font-bold text-secondary-900">NEUROVA <span className="font-medium text-secondary-400">CSV Lab</span></span>
+          </button>
+
+          <nav className="hidden items-center gap-1 sm:flex">
+            {NAV_ITEMS.map((item) => {
+              const disabled = !isLoaded && item.page !== "upload" && item.page !== "live";
+              return (
+                <button
+                  key={item.page}
+                  onClick={() => !disabled && onNavigate(item.page)}
+                  disabled={disabled}
+                  className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-all ${
+                    currentPage === item.page
+                      ? "bg-primary-50 text-primary-700"
+                      : disabled
+                        ? "text-secondary-300"
+                        : "text-secondary-600 hover:bg-secondary-100"
+                  }`}
+                >
+                  {item.icon}
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="ml-auto flex items-center gap-3">
+            <StatusPill />
+          </div>
+        </div>
+
+        <nav className="flex items-center gap-1 overflow-x-auto px-4 pb-2 sm:hidden">
+          {NAV_ITEMS.map((item) => {
+            const disabled = !isLoaded && item.page !== "upload" && item.page !== "live";
+            return (
+              <button
+                key={item.page}
+                onClick={() => !disabled && onNavigate(item.page)}
+                disabled={disabled}
+                className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-all whitespace-nowrap ${
+                  currentPage === item.page
+                    ? "bg-primary-50 text-primary-700"
+                    : disabled
+                      ? "text-secondary-300"
+                      : "text-secondary-600 hover:bg-secondary-100"
+                }`}
+              >
+                {item.icon}
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+      </header>
+
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+        {children}
+      </main>
+
+      <footer className="border-t border-secondary-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+          <p className="text-xs text-secondary-400">
+            NEUROVA CSV Lab — grain-storage monitoring. CSV analysis runs in your browser; live readings are sent from the ESP32 via Supabase.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/components/layout/PageHeader.tsx
+============================================
+
+import type { ReactNode } from "react";
+
+interface PageHeaderProps {
+  title: string;
+  subtitle?: string;
+  children?: ReactNode;
+}
+
+export function PageHeader({ title, subtitle, children }: PageHeaderProps) {
+  return (
+    <div className="mb-6 flex flex-col gap-4 border-b border-secondary-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-secondary-900">{title}</h1>
+        {subtitle ? <p className="mt-1 text-sm text-secondary-500">{subtitle}</p> : null}
+      </div>
+      {children ? <div className="flex items-center gap-3">{children}</div> : null}
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/components/layout/StatusPill.tsx
+============================================
+
+import { useDataset } from "@/lib/dataset/DatasetContext";
+
+export function StatusPill() {
+  const { isLoaded, isSample, fileName, score } = useDataset();
+
+  if (!isLoaded) {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary-300 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-secondary-500">
+        <span className="h-1.5 w-1.5 rounded-full bg-secondary-400" />
+        No dataset
+      </span>
+    );
+  }
+
+  const label = isSample ? "Sample data" : fileName ?? "Loaded";
+  const scoreColor =
+    score && score.overall >= 80
+      ? "bg-success-500"
+      : score && score.overall >= 60
+        ? "bg-warning-400"
+        : "bg-destructive-500";
+
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-secondary-300 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-secondary-700" title={label}>
+      <span className={`h-1.5 w-1.5 rounded-full ${scoreColor}`} />
+      {score ? `Score ${score.overall}` : "Loaded"}
+    </span>
+  );
+}
+
+
+============================================
+FILE: src/components/common/SectionCard.tsx
+============================================
+
+import type { ReactNode } from "react";
+
+interface SectionCardProps {
+  title: string;
+  description?: string;
+  children: ReactNode;
+  action?: ReactNode;
+}
+
+export function SectionCard({ title, description, children, action }: SectionCardProps) {
+  return (
+    <section className="animate-fade-in rounded-2xl border border-secondary-200 bg-white p-5 shadow-sm">
+      <div className="mb-4 flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-sm font-semibold text-secondary-900">{title}</h2>
+          {description ? <p className="mt-0.5 text-xs text-secondary-500">{description}</p> : null}
+        </div>
+        {action}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+
+============================================
+FILE: src/components/common/DatasetGate.tsx
+============================================
+
+import type { ReactNode } from "react";
+
+interface DatasetGateProps {
+  title: string;
+  description: string;
+  children: ReactNode;
+}
+
+export function DatasetGate({ title, description, children }: DatasetGateProps) {
+  return (
+    <div className="relative">
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, #0f172a 1px, transparent 0)", backgroundSize: "24px 24px" }} />
+      <div
+        className="mb-6 rounded-2xl border border-dashed border-secondary-300 bg-gradient-to-br from-white to-secondary-50 p-5"
+        role="region"
+        aria-label={title}
+      >
+        <p className="text-sm font-semibold text-secondary-700">{title}</p>
+        <p className="mt-0.5 text-xs text-secondary-400">{description}</p>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/components/ui/button.tsx
+============================================
+
+import type { ButtonHTMLAttributes } from "react";
+
+type Variant = "default" | "outline" | "ghost" | "destructive";
+type Size = "sm" | "md" | "lg";
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: Variant;
+  size?: Size;
+}
+
+const variantClasses: Record<Variant, string> = {
+  default: "bg-primary-600 text-white hover:bg-primary-700 shadow-sm",
+  outline: "border border-secondary-300 bg-white text-secondary-800 hover:bg-secondary-50",
+  ghost: "text-secondary-700 hover:bg-secondary-100",
+  destructive: "bg-destructive-600 text-white hover:bg-destructive-700 shadow-sm",
+};
+
+const sizeClasses: Record<Size, string> = {
+  sm: "px-3 py-1.5 text-xs",
+  md: "px-4 py-2 text-sm",
+  lg: "px-5 py-2.5 text-sm",
+};
+
+export function Button({ variant = "default", size = "md", className = "", children, ...props }: ButtonProps) {
+  return (
+    <button
+      className={`inline-flex items-center gap-2 rounded-lg font-medium transition-all duration-150 active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
+
+
+============================================
+FILE: src/components/upload/ColumnMappingForm.tsx
+============================================
+
+import { COLUMN_LABELS, ALL_COLUMNS, type GrainColumn } from "@/lib/grain/csv";
+
+interface ColumnMappingFormProps {
+  headers: string[];
+  mapping: Record<string, GrainColumn | "">;
+  onChange: (key: string, value: GrainColumn | "") => void;
+}
+
+export function ColumnMappingForm({ headers, mapping, onChange }: ColumnMappingFormProps) {
+  return (
+    <div className="space-y-2">
+      {headers.map((header) => {
+        const mapped = mapping[header] ?? "";
+        return (
+          <div
+            key={header}
+            className="flex flex-col gap-2 rounded-xl border border-secondary-200 bg-secondary-50/50 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs text-secondary-500">{header}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-secondary-300">→</span>
+              <select
+                value={mapped}
+                onChange={(e) => onChange(header, e.target.value as GrainColumn | "")}
+                className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                  mapped
+                    ? "border-primary-300 bg-primary-50 text-primary-700"
+                    : "border-secondary-300 bg-white text-secondary-500"
+                }`}
+              >
+                <option value="">— Skip —</option>
+                {ALL_COLUMNS.map((col) => (
+                  <option key={col} value={col}>
+                    {COLUMN_LABELS[col]}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/components/upload/CsvDropzone.tsx
+============================================
+
+import { useCallback, useRef, useState, type DragEvent } from "react";
+import { FileText, UploadCloud } from "lucide-react";
+
+interface CsvDropzoneProps {
+  onFile: (file: File) => void;
+  busy: boolean;
+  fileName?: string;
+}
+
+export function CsvDropzone({ onFile, busy, fileName }: CsvDropzoneProps) {
+  const [dragging, setDragging] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      setDragging(false);
+      const file = e.dataTransfer.files?.[0];
+      if (file) onFile(file);
+    },
+    [onFile],
+  );
+
+  return (
+    <div
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDragging(true);
+      }}
+      onDragLeave={() => setDragging(false)}
+      onDrop={handleDrop}
+      onClick={() => inputRef.current?.click()}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          inputRef.current?.click();
+        }
+      }}
+      className={`group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-12 text-center transition-all duration-200 ${
+        dragging
+          ? "border-primary-500 bg-primary-50 scale-[1.01]"
+          : busy
+            ? "border-secondary-300 bg-secondary-50"
+            : "border-secondary-300 bg-white hover:border-primary-400 hover:bg-primary-50/30"
+      }`}
+    >
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".csv,.txt,.tsv,text/csv"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) onFile(file);
+          e.target.value = "";
+        }}
+      />
+
+      {busy ? (
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-3 border-secondary-200 border-t-primary-500" />
+          <p className="text-sm text-secondary-500">Reading file…</p>
+        </div>
+      ) : fileName ? (
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-success-100 text-success-700">
+            <FileText className="h-6 w-6" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-secondary-900">{fileName}</p>
+            <p className="mt-0.5 text-xs text-secondary-400">Click to replace or drop a new file</p>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary-100 text-secondary-400 transition-colors group-hover:bg-primary-100 group-hover:text-primary-600">
+            <UploadCloud className="h-6 w-6" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-secondary-700">
+              Drop your CSV here, or <span className="text-primary-600 underline">browse</span>
+            </p>
+            <p className="mt-0.5 text-xs text-secondary-400">CSV, TSV or semicolon-delimited · max 20 MB</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/components/upload/DataPreviewTable.tsx
+============================================
+
+import type { NormalizedRow } from "@/lib/grain/csv";
+
+interface DataPreviewTableProps {
+  rows: NormalizedRow[];
+  maxRows?: number;
+}
+
+export function DataPreviewTable({ rows, maxRows = 12 }: DataPreviewTableProps) {
+  const display = rows.slice(0, maxRows);
+
+  return (
+    <div className="overflow-x-auto scrollbar-thin">
+      <table className="w-full text-left text-xs">
+        <thead>
+          <tr className="border-b border-secondary-200 text-secondary-500">
+            <th className="py-2 pr-4 font-medium">Timestamp</th>
+            <th className="py-2 pr-4 font-medium">Sensor</th>
+            <th className="py-2 pr-4 font-medium">Temp (°C)</th>
+            <th className="py-2 pr-4 font-medium">Humidity (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {display.map((row, i) => (
+            <tr key={i} className="border-b border-secondary-100 transition-colors hover:bg-secondary-50">
+              <td className="py-2 pr-4 font-mono text-secondary-600">{row.timestamp || "—"}</td>
+              <td className="py-2 pr-4 font-medium text-secondary-700">{row.sensor_id || "—"}</td>
+              <td className="py-2 pr-4 tabular-nums text-secondary-600">{row.temperature ?? "—"}</td>
+              <td className="py-2 pr-4 tabular-nums text-secondary-600">{row.humidity ?? "—"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {rows.length > maxRows && (
+        <p className="mt-2 text-xs text-secondary-400">
+          Showing {maxRows} of {rows.length.toLocaleString()} rows
+        </p>
+      )}
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/components/upload/ValidationReport.tsx
+============================================
+
+import { AlertTriangle, CheckCircle2, Info, XCircle } from "lucide-react";
+import type { ColumnStats, GrainColumn, ValidationIssue } from "@/lib/grain/csv";
+import { COLUMN_LABELS } from "@/lib/grain/csv";
+
+interface ValidationReportProps {
+  issues: ValidationIssue[];
+  stats: Partial<Record<GrainColumn, ColumnStats>>;
+  missing: Partial<Record<GrainColumn, number>>;
+}
+
+export function ValidationReport({ issues, stats, missing }: ValidationReportProps) {
+  const errors = issues.filter((i) => i.level === "error");
+  const warnings = issues.filter((i) => i.level === "warning");
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <SummaryTile icon={<XCircle className="h-4 w-4" />} label="Errors" value={errors.length} color="destructive" />
+        <SummaryTile icon={<AlertTriangle className="h-4 w-4" />} label="Warnings" value={warnings.length} color="warning" />
+        <SummaryTile icon={<CheckCircle2 className="h-4 w-4" />} label="OK rows" value={issues.length === 0 ? "All" : "—"} color="success" />
+        <SummaryTile icon={<Info className="h-4 w-4" />} label="Total issues" value={issues.length} color="secondary" />
+      </div>
+
+      {Object.entries(missing).some(([, v]) => (v ?? 0) > 0) ? (
+        <div className="rounded-xl border border-warning bg-warning-soft p-3">
+          <p className="text-xs font-semibold text-warning-foreground">Missing values</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {Object.entries(missing).map(([col, count]) =>
+              (count ?? 0) > 0 ? (
+                <span
+                  key={col}
+                  className="rounded-full border border-warning bg-white px-2.5 py-0.5 text-[11px] font-medium text-warning-foreground"
+                >
+                  {COLUMN_LABELS[col as GrainColumn]}: {count?.toLocaleString()}
+                </span>
+              ) : null,
+            )}
+          </div>
+        </div>
+      ) : null}
+
+      {issues.length > 0 ? (
+        <div className="max-h-48 space-y-1.5 overflow-y-auto scrollbar-thin pr-1">
+          {issues.slice(0, 50).map((issue, i) => (
+            <div
+              key={i}
+              className={`flex items-start gap-2 rounded-lg px-3 py-2 text-xs ${
+                issue.level === "error"
+                  ? "bg-destructive-soft text-destructive-foreground"
+                  : "bg-warning-soft text-warning-foreground"
+              }`}
+            >
+              {issue.level === "error" ? (
+                <XCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              ) : (
+                <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              )}
+              <span>{issue.message}</span>
+            </div>
+          ))}
+          {issues.length > 50 && (
+            <p className="px-3 py-1 text-[11px] text-secondary-400">…and {issues.length - 50} more</p>
+          )}
+        </div>
+      ) : (
+        <div className="flex items-center gap-2 rounded-xl border border-success-200 bg-success-soft px-3 py-2.5 text-xs text-success-foreground">
+          <CheckCircle2 className="h-4 w-4" />
+          All rows passed validation. No errors or warnings.
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <p className="text-xs font-semibold text-secondary-700">Column statistics</p>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {Object.entries(stats).map(([col, s]) =>
+            s ? (
+              <div key={col} className="rounded-xl border border-secondary-200 bg-secondary-50 p-3">
+                <p className="text-[11px] font-medium text-secondary-500">{COLUMN_LABELS[col as GrainColumn]}</p>
+                <div className="mt-1.5 space-y-0.5 text-xs tabular-nums text-secondary-700">
+                  <p>min <span className="font-medium">{s.min ?? "—"}{s.unit}</span></p>
+                  <p>avg <span className="font-medium">{s.mean !== null ? s.mean.toFixed(1) : "—"}{s.unit}</span></p>
+                  <p>max <span className="font-medium">{s.max ?? "—"}{s.unit}</span></p>
+                </div>
+              </div>
+            ) : null,
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SummaryTile({
+  icon,
+  label,
+  value,
+  color,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number | string;
+  color: "destructive" | "warning" | "success" | "secondary";
+}) {
+  const colorMap = {
+    destructive: "text-destructive-600 bg-destructive-soft",
+    warning: "text-warning-foreground bg-warning-soft",
+    success: "text-success-foreground bg-success-soft",
+    secondary: "text-secondary-600 bg-secondary-100",
+  };
+
+  return (
+    <div className="flex items-center gap-2.5 rounded-xl border border-secondary-200 bg-white p-3">
+      <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${colorMap[color]}`}>{icon}</div>
+      <div>
+        <p className="text-lg font-bold tabular-nums text-secondary-900">{value}</p>
+        <p className="text-[11px] text-secondary-400">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/pages/UploadPage.tsx
+============================================
+
+import { useMemo, useState } from "react";
+import { ArrowRight, DatabaseZap, UploadCloud } from "lucide-react";
+import { DatasetGate } from "@/components/common/DatasetGate";
+import { SectionCard } from "@/components/common/SectionCard";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { StatusPill } from "@/components/layout/StatusPill";
+import { ColumnMappingForm } from "@/components/upload/ColumnMappingForm";
+import { CsvDropzone } from "@/components/upload/CsvDropzone";
+import { DataPreviewTable } from "@/components/upload/DataPreviewTable";
+import { ValidationReport } from "@/components/upload/ValidationReport";
+import { Button } from "@/components/ui/button";
+import { useDataset } from "@/lib/dataset/DatasetContext";
+import { autoMap, normalizeRows, parseCsv, type GrainColumn } from "@/lib/grain/csv";
+import { SAMPLE_LABEL, SAMPLE_NOTES } from "@/lib/grain/sample";
+
+const MAX_BYTES = 20 * 1024 * 1024;
+
+interface UploadPageProps {
+  onNavigate: (page: string) => void;
+}
+
+export function UploadPage({ onNavigate }: UploadPageProps) {
+  const { loadCsv, loadSample } = useDataset();
+  const [parsed, setParsed] = useState<{ headers: string[]; rows: string[][]; fileName: string } | null>(null);
+  const [mapping, setMapping] = useState<Record<string, GrainColumn | "">>({});
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const normalized = useMemo(
+    () => (parsed ? normalizeRows(parsed.rows, parsed.headers, mapping) : null),
+    [parsed, mapping],
+  );
+
+  const blockers = normalized ? normalized.issues.filter((issue) => issue.level === "error") : [];
+
+  const handleFile = async (file: File) => {
+    setError(null);
+    if (file.size > MAX_BYTES) {
+      setError("That file is larger than the 20 MB limit.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const text = await file.text();
+      const result = parseCsv(text);
+      if (!result.headers.length || !result.rows.length) {
+        setError("No header row and data rows could be found in that file.");
+        return;
+      }
+      setParsed({ fileName: file.name, ...result });
+      setMapping(autoMap(result.headers));
+    } catch {
+      setError("That file could not be read. A plain CSV, tab or semicolon delimited file works best.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleLoad = () => {
+    if (!normalized || blockers.length || !parsed) return;
+    loadCsv({ rows: normalized.rows, mapping, fileName: parsed.fileName, stats: normalized.stats });
+    onNavigate("dashboard");
+  };
+
+  const handleSample = () => {
+    loadSample();
+    onNavigate("dashboard");
+  };
+
+  return (
+    <div className="mx-auto max-w-5xl">
+      <PageHeader
+        title="Upload CSV"
+        subtitle="Bring in grain-storage readings from a logger export, or start from the built-in sample dataset."
+      >
+        <StatusPill />
+      </PageHeader>
+
+      <DatasetGate title="Nothing imported yet" description="Drop a CSV above to map its columns, or load the sample dataset.">
+        <div className="space-y-4">
+          <CsvDropzone onFile={handleFile} busy={busy} fileName={parsed?.fileName} />
+
+          {error ? (
+            <p className="rounded-xl border border-destructive bg-destructive-soft px-4 py-3 text-xs text-destructive-foreground">{error}</p>
+          ) : null}
+
+          {parsed && normalized ? (
+            <>
+              <SectionCard
+                title="Column alias mapping"
+                description="Header names are matched automatically. Adjust anything the file names differently — the mapping applies to every reading."
+              >
+                <ColumnMappingForm
+                  headers={parsed.headers}
+                  mapping={mapping}
+                  onChange={(key, value) => setMapping((current) => ({ ...current, [key]: value }))}
+                />
+              </SectionCard>
+
+              <SectionCard title="Validation & missing values" description="What the importer saw, including every value it did not receive.">
+                <ValidationReport issues={normalized.issues} stats={normalized.stats} missing={normalized.missing} />
+              </SectionCard>
+
+              <SectionCard title="Preview" description="The first readings after mapping.">
+                <DataPreviewTable rows={normalized.rows} />
+              </SectionCard>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Button onClick={handleLoad} disabled={Boolean(blockers.length)}>
+                  <ArrowRight className="h-4 w-4" />
+                  Run the analysis
+                </Button>
+                <span className="text-[11px] text-muted-foreground">
+                  {blockers.length ? blockers[0].message : "Scoring happens in this browser — nothing is uploaded to a server."}
+                </span>
+              </div>
+            </>
+          ) : null}
+
+          <SectionCard
+            title="No sensor handy?"
+            description="The sample dataset is generated in your browser so every page of the lab can be demonstrated without hardware."
+          >
+            <ul className="space-y-2">
+              {SAMPLE_NOTES.map((note) => (
+                <li key={note} className="flex gap-2.5 text-xs text-muted-foreground">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500" />
+                  {note}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Button variant="outline" onClick={handleSample}>
+                <DatabaseZap className="h-4 w-4" />
+                Load Sample Dataset
+              </Button>
+              <span className="rounded-full border border-warning bg-warning-soft px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-warning-foreground">
+                {SAMPLE_LABEL}
+              </span>
+            </div>
+          </SectionCard>
+
+          <p className="flex items-center gap-2 text-[11px] text-muted-foreground">
+            <UploadCloud className="h-3.5 w-3.5" />
+            Files are read locally with the browser's file reader. The dataset stays in this browser and never mixes with live
+            or sample data.
+          </p>
+        </div>
+      </DatasetGate>
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/pages/DashboardPage.tsx
+============================================
+
+import { Activity, AlertTriangle, CheckCircle2, TrendingUp, XCircle } from "lucide-react";
+import { SectionCard } from "@/components/common/SectionCard";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { StatusPill } from "@/components/layout/StatusPill";
+import { Button } from "@/components/ui/button";
+import { useDataset } from "@/lib/dataset/DatasetContext";
+import type { BinScore } from "@/lib/grain/scoring";
+import type { ReactNode } from "react";
+
+interface DashboardPageProps {
+  onNavigate: (page: string) => void;
+}
+
+export function DashboardPage({ onNavigate }: DashboardPageProps) {
+  const { score, isSample, fileName, rows } = useDataset();
+
+  if (!score) return null;
+
+  const riskColors: Record<string, string> = {
+    safe: "bg-success-500",
+    caution: "bg-warning-400",
+    warning: "bg-warning-500",
+    critical: "bg-destructive-500",
+  };
+
+  const riskBg: Record<string, string> = {
+    safe: "border-success-200 bg-success-soft",
+    caution: "border-warning-200 bg-warning-soft",
+    warning: "border-warning-300 bg-warning-soft",
+    critical: "border-destructive-200 bg-destructive-soft",
+  };
+
+  return (
+    <div className="mx-auto max-w-6xl">
+      <PageHeader
+        title="Dashboard"
+        subtitle={isSample ? "Sample dataset — generated in your browser" : `Source: ${fileName ?? "uploaded CSV"}`}
+      >
+        <StatusPill />
+      </PageHeader>
+
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <StatCard
+          icon={<Activity className="h-4 w-4" />}
+          label="Overall Score"
+          value={score.overall}
+          sub="0–100 scale"
+          accent={score.overall >= 80 ? "success" : score.overall >= 60 ? "warning" : "destructive"}
+        />
+        <StatCard icon={<CheckCircle2 className="h-4 w-4" />} label="Safe Bins" value={score.safeBins} accent="success" />
+        <StatCard icon={<AlertTriangle className="h-4 w-4" />} label="Caution" value={score.cautionBins} accent="warning" />
+        <StatCard icon={<TrendingUp className="h-4 w-4" />} label="Warning" value={score.warningBins} accent="warning" />
+        <StatCard icon={<XCircle className="h-4 w-4" />} label="Critical" value={score.criticalBins} accent="destructive" />
+      </div>
+
+      <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <SectionCard title="Bin risk overview" description={`${score.bins.length} bins ranked from worst to best overall score`}>
+            <div className="space-y-2">
+              {score.bins.map((bin) => (
+                <button
+                  key={bin.sensor_id}
+                  onClick={() => onNavigate("bins")}
+                  className="flex w-full items-center gap-3 rounded-xl border border-secondary-200 bg-white p-3 text-left transition-all hover:border-primary-300 hover:bg-primary-50/30"
+                >
+                  <div className={`h-2 w-2 shrink-0 rounded-full ${riskColors[bin.riskLevel]}`} />
+                  <span className="w-20 shrink-0 font-mono text-xs font-medium text-secondary-800">{bin.sensor_id}</span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-secondary-100">
+                        <div
+                          className={`h-full rounded-full transition-all ${
+                            bin.overall >= 80 ? "bg-success-500" : bin.overall >= 60 ? "bg-warning-400" : "bg-destructive-500"
+                          }`}
+                          style={{ width: `${bin.overall}%` }}
+                        />
+                      </div>
+                      <span className="w-9 text-right text-xs font-bold tabular-nums text-secondary-700">{bin.overall}</span>
+                    </div>
+                  </div>
+                  <div className="hidden gap-3 text-[11px] tabular-nums text-secondary-400 sm:flex">
+                    <span>T:{bin.avgTemp ?? "—"}°</span>
+                    <span>H:{bin.avgHumidity ?? "—"}%</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </SectionCard>
+        </div>
+
+        <div className="space-y-4">
+          {score.worstBin ? (
+            <SectionCard title="Highest risk bin" description="The bin with the lowest overall score">
+              <BinDetailCard bin={score.worstBin} riskBg={riskBg[score.worstBin.riskLevel]} />
+            </SectionCard>
+          ) : null}
+
+          <SectionCard title="Dataset summary" description="Quick numbers for this dataset">
+            <dl className="space-y-2 text-xs">
+              <div className="flex justify-between">
+                <dt className="text-secondary-400">Total readings</dt>
+                <dd className="font-semibold tabular-nums text-secondary-700">{rows.length.toLocaleString()}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-secondary-400">Bins monitored</dt>
+                <dd className="font-semibold tabular-nums text-secondary-700">{score.bins.length}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-secondary-400">Safe bins</dt>
+                <dd className="font-semibold tabular-nums text-success-foreground">{score.safeBins}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-secondary-400">At-risk bins</dt>
+                <dd className="font-semibold tabular-nums text-destructive-foreground">{score.warningBins + score.criticalBins}</dd>
+              </div>
+            </dl>
+          </SectionCard>
+
+          <Button variant="outline" className="w-full" onClick={() => onNavigate("trends")}>
+            <TrendingUp className="h-4 w-4" />
+            View trends
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BinDetailCard({ bin, riskBg }: { bin: BinScore; riskBg: string }) {
+  return (
+    <div className={`rounded-xl border p-3 ${riskBg}`}>
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-sm font-bold text-secondary-900">{bin.sensor_id}</span>
+        <span className="text-2xl font-bold tabular-nums text-secondary-900">{bin.overall}</span>
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+        <div>
+          <p className="text-secondary-400">Temp</p>
+          <p className="font-bold tabular-nums text-secondary-800">{bin.avgTemp ?? "—"}°C</p>
+        </div>
+        <div>
+          <p className="text-secondary-400">Humidity</p>
+          <p className="font-bold tabular-nums text-secondary-800">{bin.avgHumidity ?? "—"}%</p>
+        </div>
+      </div>
+      <div className="mt-3 flex items-center gap-1.5 text-[11px] text-secondary-500">
+        <span className={`inline-block rounded-full px-2 py-0.5 font-semibold uppercase ${
+          bin.trend === "rising" ? "bg-destructive-soft text-destructive-foreground" :
+          bin.trend === "falling" ? "bg-success-soft text-success-foreground" :
+          "bg-secondary-100 text-secondary-600"
+        }`}>
+          {bin.trend}
+        </span>
+        <span>{bin.readingCount.toLocaleString()} readings</span>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({
+  icon,
+  label,
+  value,
+  sub,
+  accent,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: number;
+  sub?: string;
+  accent: "success" | "warning" | "destructive";
+}) {
+  const accentMap = {
+    success: "text-success-foreground bg-success-soft",
+    warning: "text-warning-foreground bg-warning-soft",
+    destructive: "text-destructive-foreground bg-destructive-soft",
+  };
+
+  return (
+    <div className="rounded-2xl border border-secondary-200 bg-white p-4 shadow-sm">
+      <div className={`mb-2 flex h-8 w-8 items-center justify-center rounded-lg ${accentMap[accent]}`}>{icon}</div>
+      <p className="text-2xl font-bold tabular-nums text-secondary-900">{value}</p>
+      <p className="text-[11px] text-secondary-400">{label}</p>
+      {sub ? <p className="mt-0.5 text-[10px] text-secondary-300">{sub}</p> : null}
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/pages/BinsPage.tsx
+============================================
+
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { StatusPill } from "@/components/layout/StatusPill";
+import { useDataset } from "@/lib/dataset/DatasetContext";
+import type { BinScore } from "@/lib/grain/scoring";
+
+interface BinsPageProps {
+  onNavigate: (page: string) => void;
+}
+
+type SortKey = "sensor_id" | "overall" | "temperature" | "humidity";
+
+export function BinsPage(_: BinsPageProps) {
+  const { score } = useDataset();
+  const [sortKey, setSortKey] = useState<SortKey>("overall");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  if (!score) return null;
+
+  const sorted = [...score.bins].sort((a, b) => {
+    let cmp: number;
+    if (sortKey === "sensor_id") {
+      cmp = a.sensor_id.localeCompare(b.sensor_id);
+    } else {
+      cmp = (a[sortKey] as number) - (b[sortKey] as number);
+    }
+    return sortDir === "asc" ? cmp : -cmp;
+  });
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const riskBadge: Record<string, string> = {
+    safe: "bg-success-soft text-success-foreground border-success-200",
+    caution: "bg-warning-soft text-warning-foreground border-warning-200",
+    warning: "bg-warning-soft text-warning-foreground border-warning-300",
+    critical: "bg-destructive-soft text-destructive-foreground border-destructive-200",
+  };
+
+  const trendBadge: Record<string, string> = {
+    stable: "bg-secondary-100 text-secondary-600",
+    rising: "bg-destructive-soft text-destructive-foreground",
+    falling: "bg-success-soft text-success-foreground",
+  };
+
+  const SortHeader = ({ label, sortK }: { label: string; sortK: SortKey }) => (
+    <th
+      className="cursor-pointer select-none py-2 pr-4 font-medium transition-colors hover:text-secondary-700"
+      onClick={() => toggleSort(sortK)}
+    >
+      <span className="inline-flex items-center gap-1">
+        {label}
+        {sortKey === sortK ? (
+          sortDir === "asc" ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />
+        ) : null}
+      </span>
+    </th>
+  );
+
+  return (
+    <div className="mx-auto max-w-6xl">
+      <PageHeader title="Bins" subtitle="Per-bin breakdown of every sensor reading and risk score">
+        <StatusPill />
+      </PageHeader>
+
+      <div className="overflow-x-auto rounded-2xl border border-secondary-200 bg-white shadow-sm scrollbar-thin">
+        <table className="w-full text-left text-xs">
+          <thead className="border-b border-secondary-200 bg-secondary-50 text-secondary-500">
+            <tr>
+              <SortHeader label="Sensor" sortK="sensor_id" />
+              <SortHeader label="Overall" sortK="overall" />
+              <SortHeader label="Temp" sortK="temperature" />
+              <SortHeader label="Humidity" sortK="humidity" />
+              <th className="py-2 pr-4 font-medium">Trend</th>
+              <th className="py-2 pr-4 font-medium">Risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map((bin) => (
+              <BinRow
+                key={bin.sensor_id}
+                bin={bin}
+                expanded={expanded === bin.sensor_id}
+                onToggle={() => setExpanded((cur) => (cur === bin.sensor_id ? null : bin.sensor_id))}
+                riskBadge={riskBadge[bin.riskLevel]}
+                trendBadge={trendBadge[bin.trend]}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function BinRow({
+  bin,
+  expanded,
+  onToggle,
+  riskBadge,
+  trendBadge,
+}: {
+  bin: BinScore;
+  expanded: boolean;
+  onToggle: () => void;
+  riskBadge: string;
+  trendBadge: string;
+}) {
+  return (
+    <>
+      <tr
+        className="cursor-pointer border-b border-secondary-100 transition-colors hover:bg-secondary-50"
+        onClick={onToggle}
+      >
+        <td className="py-2.5 pr-4 font-mono font-medium text-secondary-800">{bin.sensor_id}</td>
+        <td className="py-2.5 pr-4">
+          <div className="flex items-center gap-2">
+            <span className="w-9 text-right font-bold tabular-nums text-secondary-700">{bin.overall}</span>
+            <div className="h-1.5 w-16 overflow-hidden rounded-full bg-secondary-100">
+              <div
+                className={`h-full rounded-full ${bin.overall >= 80 ? "bg-success-500" : bin.overall >= 60 ? "bg-warning-400" : "bg-destructive-500"}`}
+                style={{ width: `${bin.overall}%` }}
+              />
+            </div>
+          </div>
+        </td>
+        <td className="py-2.5 pr-4 tabular-nums text-secondary-600">{bin.avgTemp ?? "—"}°C</td>
+        <td className="py-2.5 pr-4 tabular-nums text-secondary-600">{bin.avgHumidity ?? "—"}%</td>
+        <td className="py-2.5 pr-4">
+          <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${trendBadge}`}>
+            {bin.trend}
+          </span>
+        </td>
+        <td className="py-2.5 pr-4">
+          <span className={`inline-block rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase ${riskBadge}`}>
+            {bin.riskLevel}
+          </span>
+        </td>
+      </tr>
+      {expanded ? (
+        <tr className="bg-secondary-50/50">
+          <td colSpan={6} className="px-4 py-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <Detail label="Avg Temp" value={bin.avgTemp !== null ? `${bin.avgTemp}°C` : "—"} />
+              <Detail label="Max Temp" value={bin.maxTemp !== null ? `${bin.maxTemp}°C` : "—"} />
+              <Detail label="Avg Humidity" value={bin.avgHumidity !== null ? `${bin.avgHumidity}%` : "—"} />
+              <Detail label="Max Humidity" value={bin.maxHumidity !== null ? `${bin.maxHumidity}%` : "—"} />
+            </div>
+            <div className="mt-3 grid grid-cols-3 gap-3">
+              <ScoreBar label="Temperature" value={bin.temperature} />
+              <ScoreBar label="Humidity" value={bin.humidity} />
+            </div>
+            <p className="mt-3 text-[11px] text-secondary-400">
+              {bin.readingCount.toLocaleString()} readings · last: {bin.latestReading.timestamp || "—"}
+            </p>
+          </td>
+        </tr>
+      ) : null}
+    </>
+  );
+}
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-secondary-200 bg-white p-2.5">
+      <p className="text-[10px] text-secondary-400">{label}</p>
+      <p className="mt-0.5 font-bold tabular-nums text-secondary-800">{value}</p>
+    </div>
+  );
+}
+
+function ScoreBar({ label, value }: { label: string; value: number }) {
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between text-[11px]">
+        <span className="text-secondary-500">{label}</span>
+        <span className="font-bold tabular-nums text-secondary-700">{value}</span>
+      </div>
+      <div className="h-1.5 overflow-hidden rounded-full bg-secondary-200">
+        <div
+          className={`h-full rounded-full ${value >= 80 ? "bg-success-500" : value >= 60 ? "bg-warning-400" : "bg-destructive-500"}`}
+          style={{ width: `${value}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/pages/TrendsPage.tsx
+============================================
+
+import { useMemo, useState } from "react";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { StatusPill } from "@/components/layout/StatusPill";
+import { SectionCard } from "@/components/common/SectionCard";
+import { useDataset } from "@/lib/dataset/DatasetContext";
+import type { NormalizedRow } from "@/lib/grain/csv";
+
+interface TrendsPageProps {
+  onNavigate: (page: string) => void;
+}
+
+type Metric = "temperature" | "humidity";
+
+const METRIC_LABELS: Record<Metric, string> = {
+  temperature: "Temperature (°C)",
+  humidity: "Humidity (%)",
+};
+
+const METRIC_COLORS: Record<Metric, string> = {
+  temperature: "#ef4444",
+  humidity: "#f59e0b",
+};
+
+export function TrendsPage(_: TrendsPageProps) {
+  const { rows, score } = useDataset();
+  const [metric, setMetric] = useState<Metric>("temperature");
+
+  const bins = useMemo(() => {
+    if (!score) return [];
+    return score.bins.map((b) => b.sensor_id);
+  }, [score]);
+
+  const [selectedBins, setSelectedBins] = useState<Set<string>>(new Set());
+
+  const displayedBins = useMemo(() => {
+    if (selectedBins.size > 0) return Array.from(selectedBins);
+    return bins.slice(0, 6);
+  }, [selectedBins, bins]);
+
+  const chartData = useMemo(() => {
+    const byBin = new Map<string, { ts: Date; value: number }[]>();
+    for (const row of rows) {
+      if (!row.sensor_id) continue;
+      const value = row[metric];
+      if (value === null) continue;
+      const arr = byBin.get(row.sensor_id) ?? [];
+      arr.push({ ts: new Date(row.timestamp), value });
+      byBin.set(row.sensor_id, arr);
+    }
+    return byBin;
+  }, [rows, metric]);
+
+  const allValues = useMemo(() => {
+    const vals: number[] = [];
+    for (const bin of displayedBins) {
+      const data = chartData.get(bin);
+      if (data) vals.push(...data.map((d) => d.value));
+    }
+    return vals;
+  }, [chartData, displayedBins]);
+
+  const minVal = allValues.length ? Math.min(...allValues) : 0;
+  const maxVal = allValues.length ? Math.max(...allValues) : 100;
+  const valRange = maxVal - minVal || 1;
+
+  const allTimes = useMemo(() => {
+    const times: Date[] = [];
+    for (const bin of displayedBins) {
+      const data = chartData.get(bin);
+      if (data) times.push(...data.map((d) => d.ts));
+    }
+    return times.sort((a, b) => a.getTime() - b.getTime());
+  }, [chartData, displayedBins]);
+
+  const minTime = allTimes.length ? allTimes[0].getTime() : 0;
+  const maxTime = allTimes.length ? allTimes[allTimes.length - 1].getTime() : 1;
+  const timeRange = maxTime - minTime || 1;
+
+  if (!score) return null;
+
+  const toggleBin = (bin: string) => {
+    setSelectedBins((cur) => {
+      const next = new Set(cur);
+      if (next.has(bin)) next.delete(bin);
+      else next.add(bin);
+      return next;
+    });
+  };
+
+  return (
+    <div className="mx-auto max-w-6xl">
+      <PageHeader title="Trends" subtitle="Sensor readings over time, per bin">
+        <StatusPill />
+      </PageHeader>
+
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        {(Object.keys(METRIC_LABELS) as Metric[]).map((m) => (
+          <button
+            key={m}
+            onClick={() => setMetric(m)}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+              metric === m
+                ? "bg-secondary-900 text-white"
+                : "border border-secondary-300 bg-white text-secondary-600 hover:bg-secondary-50"
+            }`}
+          >
+            {METRIC_LABELS[m]}
+          </button>
+        ))}
+      </div>
+
+      <SectionCard
+        title={METRIC_LABELS[metric]}
+        description="Each line is one bin. Click a bin in the legend to toggle it."
+      >
+        <div className="relative h-80 w-full">
+          <svg viewBox="0 0 800 320" className="h-full w-full" preserveAspectRatio="none">
+            {[0, 0.25, 0.5, 0.75, 1].map((p) => (
+              <line
+                key={p}
+                x1={40}
+                y1={10 + p * 290}
+                x2={790}
+                y2={10 + p * 290}
+                stroke="#e2e8f0"
+                strokeWidth={1}
+              />
+            ))}
+            {[0, 0.25, 0.5, 0.75, 1].map((p) => (
+              <text
+                key={p}
+                x={35}
+                y={14 + p * 290}
+                textAnchor="end"
+                className="fill-secondary-400 text-[10px]"
+              >
+                {(maxVal - p * valRange).toFixed(1)}
+              </text>
+            ))}
+            {displayedBins.map((bin) => {
+              const data = chartData.get(bin);
+              if (!data || data.length < 2) return null;
+              const color = METRIC_COLORS[metric];
+              const points = data
+                .map((d) => {
+                  const x = 40 + ((d.ts.getTime() - minTime) / timeRange) * 750;
+                  const y = 300 - ((d.value - minVal) / valRange) * 290;
+                  return `${x.toFixed(1)},${y.toFixed(1)}`;
+                })
+                .join(" ");
+              return (
+                <polyline
+                  key={bin}
+                  points={points}
+                  fill="none"
+                  stroke={color}
+                  strokeWidth={1.5}
+                  opacity={0.7}
+                  vectorEffect="non-scaling-stroke"
+                />
+              );
+            })}
+          </svg>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {bins.map((bin) => {
+            const active = displayedBins.includes(bin);
+            return (
+              <button
+                key={bin}
+                onClick={() => toggleBin(bin)}
+                className={`rounded-full border px-3 py-1 text-[11px] font-medium transition-all ${
+                  active
+                    ? "border-secondary-400 bg-white text-secondary-700"
+                    : "border-secondary-200 bg-secondary-50 text-secondary-400"
+                }`}
+              >
+                {bin}
+              </button>
+            );
+          })}
+        </div>
+      </SectionCard>
+
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <SectionCard title="Metric summary" description={`Across ${displayedBins.length} bins`}>
+          <dl className="space-y-2 text-xs">
+            <div className="flex justify-between">
+              <dt className="text-secondary-400">Minimum</dt>
+              <dd className="font-semibold tabular-nums text-secondary-700">{minVal.toFixed(1)}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-secondary-400">Maximum</dt>
+              <dd className="font-semibold tabular-nums text-secondary-700">{maxVal.toFixed(1)}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-secondary-400">Range</dt>
+              <dd className="font-semibold tabular-nums text-secondary-700">{valRange.toFixed(1)}</dd>
+            </div>
+          </dl>
+        </SectionCard>
+
+        <SectionCard title="Showing" description="Bins currently displayed on the chart">
+          <div className="flex flex-wrap gap-1.5">
+            {displayedBins.map((bin) => (
+              <span
+                key={bin}
+                className="rounded-lg border border-secondary-200 bg-secondary-50 px-2.5 py-0.5 font-mono text-[11px] text-secondary-600"
+              >
+                {bin}
+              </span>
+            ))}
+          </div>
+          {selectedBins.size === 0 ? (
+            <p className="mt-2 text-[11px] text-secondary-400">First 6 bins shown by default. Click any bin above to customize.</p>
+          ) : null}
+        </SectionCard>
+      </div>
+    </div>
+  );
+}
+
+
+============================================
+FILE: src/pages/LivePage.tsx
+============================================
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Activity,
+  AlertTriangle,
+  Download,
+  Radio,
+  RefreshCw,
+  Thermometer,
+  Trash2,
+  TrendingUp,
+  Waves,
+  Wifi,
+  WifiOff,
+  Wind,
+} from "lucide-react";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { StatusPill } from "@/components/layout/StatusPill";
+import { SectionCard } from "@/components/common/SectionCard";
+import { Button } from "@/components/ui/button";
+import { supabase, computeAlerts, type SensorReading } from "@/lib/supabaseClient";
+
+const OFFLINE_AFTER_SEC = 60;
+const POLL_INTERVAL_MS = 3000;
+
+const TEMP_WARNING = 35.0;
+const RH_WARNING = 65.0;
+const RH_HIGH = 75.0;
+const PIEZO_EVENT_THRESHOLD = 250;
+const RISK_ALERT_LIMIT = 30.0;
+
+type ConnectionState = "no-data" | "live" | "stale";
+
+interface LivePageProps {
+  onNavigate: (page: string) => void;
+}
+
+export function LivePage(_: LivePageProps) {
+  const [readings, setReadings] = useState<SensorReading[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [clearing, setClearing] = useState(false);
+  const [tick, setTick] = useState(0);
+  const [serverAgeSec, setServerAgeSec] = useState<number | null>(null);
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const fetchReadings = useCallback(async () => {
+    const [readingsRes, timeRes] = await Promise.all([
+      supabase
+        .from("sensor_readings")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100),
+      supabase.rpc("get_server_time"),
+    ]);
+
+    if (readingsRes.error) {
+      setError("Could not fetch live readings. Check that the ESP32 is sending data.");
+      setLoading(false);
+      return;
+    }
+
+    if (readingsRes.data) {
+      setReadings((readingsRes.data as SensorReading[]).map(computeAlerts));
+      setError(null);
+      setLastUpdated(new Date());
+    }
+
+    if (timeRes.data) {
+      const serverNow = new Date(timeRes.data as string).getTime();
+      const latestTs = readingsRes.data?.[0]
+        ? new Date(readingsRes.data[0].created_at).getTime()
+        : null;
+      if (latestTs !== null) {
+        setServerAgeSec(Math.max(0, (serverNow - latestTs) / 1000));
+      } else {
+        setServerAgeSec(null);
+      }
+    }
+
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchReadings();
+  }, [fetchReadings]);
+
+  useEffect(() => {
+    if (autoRefresh) {
+      intervalRef.current = setInterval(fetchReadings, POLL_INTERVAL_MS);
+      return () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      };
+    }
+  }, [autoRefresh, fetchReadings]);
+
+  useEffect(() => {
+    tickRef.current = setInterval(() => setTick((t) => t + 1), 1000);
+    return () => {
+      if (tickRef.current) clearInterval(tickRef.current);
+    };
+  }, []);
+
+  const downloadCsv = useCallback(() => {
+    if (readings.length === 0) return;
+    const headers = [
+      "id", "created_at", "device_id", "temperature", "humidity",
+      "vibration_amplitude", "vibration_event", "temperature_warning",
+      "humidity_warning", "total_risk", "risk_alert",
+    ];
+    const lines = [headers.join(",")];
+    for (const r of readings) {
+      lines.push([
+        r.id,
+        r.created_at,
+        r.device_id,
+        r.temperature ?? "",
+        r.humidity ?? "",
+        r.vibration_amplitude ?? "",
+        r.vibration_event,
+        r.temperature_warning,
+        r.humidity_warning,
+        r.total_risk ?? "",
+        r.risk_alert,
+      ].join(","));
+    }
+    const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `neurova-readings-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [readings]);
+
+  const clearOldData = useCallback(async () => {
+    setClearing(true);
+    const { error: delError } = await supabase
+      .from("sensor_readings")
+      .delete()
+      .neq("id", -1);
+
+    setClearing(false);
+    if (delError) {
+      setError("Could not clear old readings from the database.");
+      return;
+    }
+    setServerAgeSec(null);
+    await fetchReadings();
+  }, [fetchReadings]);
+
+  const latest = readings[0] ?? null;
+
+  const displayAge = (() => {
+    void tick;
+    if (serverAgeSec === null) return null;
+    return Math.floor(serverAgeSec + (Date.now() - (lastUpdated?.getTime() ?? Date.now())) / 1000);
+  })();
+
+  const connectionState: ConnectionState = (() => {
+    if (!latest) return "no-data";
+    if (displayAge === null) return "stale";
+    if (displayAge <= OFFLINE_AFTER_SEC) return "live";
+    return "stale";
+  })();
+
+  const activeAlerts = getActiveAlerts(latest);
+  const recentEvents = readings.filter((r) => r.vibration_event).slice(0, 8);
+  const alertReadings = readings.filter((r) => r.risk_alert).slice(0, 8);
+
+  const chartReadings = [...readings].reverse().slice(-40);
+
+  const tempValues = chartReadings.map((r) => r.temperature).filter((v): v is number => v !== null);
+  const humValues = chartReadings.map((r) => r.humidity).filter((v): v is number => v !== null);
+  const riskValues = chartReadings.map((r) => r.total_risk).filter((v): v is number => v !== null);
+  const vibValues = chartReadings.map((r) => r.vibration_amplitude).filter((v): v is number => v !== null);
+
+  return (
+    <div className="mx-auto max-w-6xl">
+      <PageHeader title="Live Monitor" subtitle="Real-time readings from the ESP32 sensor node via Supabase">
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={downloadCsv}
+            disabled={readings.length === 0}
+          >
+            <Download className="h-3.5 w-3.5" />
+            Export CSV
+          </Button>
+          <button
+            onClick={() => setAutoRefresh((v) => !v)}
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wider transition-all ${
+              autoRefresh
+                ? "border-success-200 bg-success-soft text-success-foreground"
+                : "border-secondary-300 bg-white text-secondary-500"
+            }`}
+          >
+            <span className={`h-1.5 w-1.5 rounded-full ${autoRefresh ? "bg-success-500 animate-pulse" : "bg-secondary-400"}`} />
+            {autoRefresh ? "Auto" : "Paused"}
+          </button>
+          <StatusPill />
+        </div>
+      </PageHeader>
+
+      {loading ? (
+        <div className="flex items-center justify-center py-16">
+          <div className="h-10 w-10 animate-spin rounded-full border-3 border-secondary-200 border-t-primary-500" />
+        </div>
+      ) : error ? (
+        <SectionCard title="Connection issue" description="The live monitor could not load readings">
+          <div className="rounded-xl border border-destructive bg-destructive-soft px-4 py-3 text-xs text-destructive-foreground">
+            {error}
+          </div>
+          <Button variant="outline" className="mt-3" onClick={fetchReadings}>
+            <RefreshCw className="h-4 w-4" />
+            Retry
+          </Button>
+        </SectionCard>
+      ) : connectionState === "no-data" ? (
+        <SectionCard
+          title="No readings yet"
+          description="Waiting for the ESP32 to send its first sensor reading."
+        >
+          <div className="flex flex-col items-center gap-3 py-8 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary-100 text-secondary-400">
+              <Radio className="h-7 w-7" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-secondary-600">No data received</p>
+              <p className="mt-1 text-xs text-secondary-400">
+                Make sure the ESP32 is powered on, connected to Wi-Fi, and posting to the ingest endpoint.
+                Check the setup instructions below.
+              </p>
+            </div>
+            <Button variant="outline" className="mt-2" onClick={fetchReadings}>
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </Button>
+          </div>
+
+          <EspSetupCard />
+        </SectionCard>
+      ) : (
+        <div className="space-y-4">
+          <ConnectionBanner
+            state={connectionState}
+            ageSec={displayAge ?? 0}
+            latestTimestamp={latest?.created_at ?? null}
+          />
+
+          {connectionState === "stale" && (
+            <SectionCard
+              title="ESP32 disconnected"
+              description={`Last reading was ${displayAge ?? 0}s ago — no new data for over ${OFFLINE_AFTER_SEC}s.`}
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs text-secondary-500">
+                  The data below is from a previous ESP32 session and is shown for reference.
+                  When the device reconnects, new readings will appear at the top automatically.
+                  You can clear old test data to start fresh.
+                </p>
+                <div className="flex shrink-0 gap-2">
+                  <Button size="sm" variant="outline" onClick={fetchReadings}>
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    Check again
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={clearOldData}
+                    disabled={clearing}
+                    className="border-destructive-200 text-destructive-600 hover:bg-destructive-soft"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    {clearing ? "Clearing..." : "Clear old data"}
+                  </Button>
+                </div>
+              </div>
+            </SectionCard>
+          )}
+
+          {activeAlerts.length > 0 && (
+            <div className="space-y-2">
+              {activeAlerts.map((alert, i) => (
+                <div
+                  key={i}
+                  className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${
+                    alert.severity === "critical"
+                      ? "border-destructive-300 bg-destructive-soft"
+                      : "border-warning-300 bg-warning-soft"
+                  }`}
+                >
+                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
+                    alert.severity === "critical"
+                      ? "bg-destructive-500 text-white"
+                      : "bg-warning-500 text-white"
+                  }`}>
+                    <AlertTriangle className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1">
+                    <p className={`text-sm font-semibold ${
+                      alert.severity === "critical"
+                        ? "text-destructive-foreground"
+                        : "text-warning-foreground"
+                    }`}>{alert.title}</p>
+                    <p className="text-[11px] text-secondary-500">{alert.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {latest ? (
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+              <LiveStat
+                icon={<Activity className="h-4 w-4" />}
+                label="Risk Score"
+                value={latest.total_risk !== null ? latest.total_risk.toFixed(1) : "—"}
+                sub={`alert if > ${RISK_ALERT_LIMIT}`}
+                accent={
+                  latest.total_risk !== null && latest.total_risk > RISK_ALERT_LIMIT
+                    ? "destructive"
+                    : latest.total_risk !== null && latest.total_risk > 20
+                    ? "warning"
+                    : "success"
+                }
+                dimmed={connectionState === "stale"}
+              />
+              <LiveStat
+                icon={<Thermometer className="h-4 w-4" />}
+                label="Temperature"
+                value={latest.temperature !== null ? `${latest.temperature.toFixed(1)}°C` : "—"}
+                sub={`warn if > ${TEMP_WARNING}°C`}
+                accent={latest.temperature_warning ? "destructive" : "secondary"}
+                dimmed={connectionState === "stale"}
+              />
+              <LiveStat
+                icon={<Wind className="h-4 w-4" />}
+                label="Humidity"
+                value={latest.humidity !== null ? `${latest.humidity.toFixed(1)}%` : "—"}
+                sub={`warn if > ${RH_WARNING}%`}
+                accent={latest.humidity_warning ? (latest.humidity !== null && latest.humidity > RH_HIGH ? "destructive" : "warning") : "secondary"}
+                dimmed={connectionState === "stale"}
+              />
+              <LiveStat
+                icon={<Waves className="h-4 w-4" />}
+                label="Vibration"
+                value={latest.vibration_amplitude ?? "—"}
+                sub={`event if >= ${PIEZO_EVENT_THRESHOLD}`}
+                accent={latest.vibration_event ? "warning" : "secondary"}
+                dimmed={connectionState === "stale"}
+              />
+              <LiveStat
+                icon={<AlertTriangle className="h-4 w-4" />}
+                label="Alert Status"
+                value={latest.risk_alert ? "ACTIVE" : "CLEAR"}
+                sub={latest.risk_alert ? `risk > ${RISK_ALERT_LIMIT}` : "all normal"}
+                accent={latest.risk_alert ? "destructive" : "success"}
+                dimmed={connectionState === "stale"}
+              />
+            </div>
+          ) : null}
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <SectionCard title="Temperature trend" description={`Last 40 readings · warn above ${TEMP_WARNING}°C`}>
+              <MiniChart
+                values={tempValues}
+                color="#ef4444"
+                unit="°C"
+                threshold={TEMP_WARNING}
+                thresholdLabel={`${TEMP_WARNING}°C warn`}
+              />
+            </SectionCard>
+            <SectionCard title="Humidity trend" description={`Last 40 readings · warn above ${RH_WARNING}%`}>
+              <MiniChart
+                values={humValues}
+                color="#f59e0b"
+                unit="%"
+                threshold={RH_WARNING}
+                thresholdLabel={`${RH_WARNING}% warn`}
+              />
+            </SectionCard>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <SectionCard title="Vibration amplitude" description={`Last 40 readings · event at ${PIEZO_EVENT_THRESHOLD} ADC`}>
+              <MiniChart
+                values={vibValues}
+                color="#8b5cf6"
+                unit=""
+                threshold={PIEZO_EVENT_THRESHOLD}
+                thresholdLabel={`event ≥ ${PIEZO_EVENT_THRESHOLD}`}
+              />
+            </SectionCard>
+            <SectionCard title="Combined risk score" description={`ESP32-computed · alert above ${RISK_ALERT_LIMIT}`}>
+              <MiniChart
+                values={riskValues}
+                color="#14b8a6"
+                unit=""
+                max={100}
+                threshold={RISK_ALERT_LIMIT}
+                thresholdLabel={`alert > ${RISK_ALERT_LIMIT}`}
+              />
+            </SectionCard>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <SectionCard title="Risk alerts" description={`Readings where total risk exceeded ${RISK_ALERT_LIMIT}`}>
+              {alertReadings.length > 0 ? (
+                <div className="space-y-2">
+                  {alertReadings.map((r) => (
+                    <div key={r.id} className="flex items-center gap-3 rounded-lg border border-destructive-200 bg-destructive-soft px-3 py-2 text-xs">
+                      <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-destructive-600" />
+                      <span className="font-mono text-secondary-500">{formatTime(r.created_at)}</span>
+                      <span className="font-medium text-destructive-foreground">Risk {r.total_risk?.toFixed(1)}</span>
+                      <span className="text-secondary-400">T:{r.temperature?.toFixed(1)}°C H:{r.humidity?.toFixed(1)}%</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-secondary-400">No risk alerts in the recent window.</p>
+              )}
+            </SectionCard>
+
+            <SectionCard title="Vibration events" description={`Piezo amplitude crossed ${PIEZO_EVENT_THRESHOLD} ADC`}>
+              {recentEvents.length > 0 ? (
+                <div className="space-y-2">
+                  {recentEvents.map((r) => (
+                    <div key={r.id} className="flex items-center gap-3 rounded-lg border border-warning-200 bg-warning-soft px-3 py-2 text-xs">
+                      <Waves className="h-3.5 w-3.5 shrink-0 text-warning-foreground" />
+                      <span className="font-mono text-secondary-500">{formatTime(r.created_at)}</span>
+                      <span className="font-medium text-warning-foreground">Amplitude {r.vibration_amplitude}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-secondary-400">No vibration events detected.</p>
+              )}
+            </SectionCard>
+          </div>
+
+          <SectionCard
+            title="Raw reading log"
+            description={`${readings.length} readings · last updated ${lastUpdated ? formatTime(lastUpdated.toISOString()) : "—"}`}
+            action={
+              <Button size="sm" variant="ghost" onClick={fetchReadings}>
+                <RefreshCw className="h-3.5 w-3.5" />
+              </Button>
+            }
+          >
+            <div className="max-h-64 overflow-y-auto scrollbar-thin">
+              <table className="w-full text-left text-xs">
+                <thead className="sticky top-0 bg-white">
+                  <tr className="border-b border-secondary-200 text-secondary-400">
+                    <th className="py-2 pr-3 font-medium">Time</th>
+                    <th className="py-2 pr-3 font-medium">Device</th>
+                    <th className="py-2 pr-3 font-medium">Temp</th>
+                    <th className="py-2 pr-3 font-medium">RH</th>
+                    <th className="py-2 pr-3 font-medium">Vib</th>
+                    <th className="py-2 pr-3 font-medium">Risk</th>
+                    <th className="py-2 pr-3 font-medium">Alert</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {readings.slice(0, 50).map((r) => {
+                    const rowAge = displayAge !== null && r.id === latest?.id ? displayAge : null;
+                    const isStaleRow = rowAge !== null && rowAge > OFFLINE_AFTER_SEC;
+                    return (
+                      <tr key={r.id} className={`border-b border-secondary-100 hover:bg-secondary-50 ${isStaleRow ? "opacity-50" : ""}`}>
+                        <td className="py-1.5 pr-3 font-mono text-secondary-500">{formatTime(r.created_at)}</td>
+                        <td className="py-1.5 pr-3 font-mono text-secondary-600">{r.device_id}</td>
+                        <td className={`py-1.5 pr-3 tabular-nums ${r.temperature_warning ? "text-destructive-600 font-medium" : "text-secondary-700"}`}>
+                          {r.temperature?.toFixed(1) ?? "—"}
+                        </td>
+                        <td className={`py-1.5 pr-3 tabular-nums ${r.humidity_warning ? "text-warning-600 font-medium" : "text-secondary-700"}`}>
+                          {r.humidity?.toFixed(1) ?? "—"}
+                        </td>
+                        <td className={`py-1.5 pr-3 tabular-nums ${r.vibration_event ? "text-warning-600 font-medium" : "text-secondary-700"}`}>
+                          {r.vibration_amplitude ?? "—"}
+                        </td>
+                        <td className={`py-1.5 pr-3 tabular-nums font-medium ${r.risk_alert ? "text-destructive-600" : "text-secondary-700"}`}>
+                          {r.total_risk?.toFixed(1) ?? "—"}
+                        </td>
+                        <td className="py-1.5 pr-3">
+                          <span className={`inline-block h-2 w-2 rounded-full ${r.risk_alert ? "bg-destructive-500" : "bg-success-500"}`} />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </SectionCard>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function getActiveAlerts(latest: SensorReading | null): Array<{ severity: "critical" | "warning"; title: string; detail: string }> {
+  if (!latest) return [];
+  const alerts: Array<{ severity: "critical" | "warning"; title: string; detail: string }> = [];
+
+  if (latest.risk_alert && latest.total_risk !== null) {
+    alerts.push({
+      severity: "critical",
+      title: `Risk alert active — score ${latest.total_risk.toFixed(1)}`,
+      detail: `Combined risk exceeded ${RISK_ALERT_LIMIT}. Check temperature, humidity, and vibration immediately.`,
+    });
+  }
+
+  if (latest.temperature_warning && latest.temperature !== null) {
+    alerts.push({
+      severity: "critical",
+      title: `Temperature high — ${latest.temperature.toFixed(1)}°C`,
+      detail: `Above warning threshold of ${TEMP_WARNING}°C. Grain storage temperature is too high.`,
+    });
+  }
+
+  if (latest.humidity !== null && latest.humidity > RH_HIGH) {
+    alerts.push({
+      severity: "critical",
+      title: `Humidity critical — ${latest.humidity.toFixed(1)}%`,
+      detail: `Above high threshold of ${RH_HIGH}%. Moisture condensation and mold growth likely.`,
+    });
+  } else if (latest.humidity_warning && latest.humidity !== null) {
+    alerts.push({
+      severity: "warning",
+      title: `Humidity elevated — ${latest.humidity.toFixed(1)}%`,
+      detail: `Above warning threshold of ${RH_WARNING}%. Monitor closely for spoilage indicators.`,
+    });
+  }
+
+  if (latest.vibration_event && latest.vibration_amplitude !== null) {
+    alerts.push({
+      severity: "warning",
+      title: `Vibration event detected — amplitude ${latest.vibration_amplitude}`,
+      detail: `Piezo amplitude crossed ${PIEZO_EVENT_THRESHOLD} ADC. Possible impact or pest activity.`,
+    });
+  }
+
+  return alerts;
+}
+
+function ConnectionBanner({
+  state,
+  ageSec,
+  latestTimestamp,
+}: {
+  state: ConnectionState;
+  ageSec: number;
+  latestTimestamp: string | null;
+}) {
+  if (state === "live") {
+    return (
+      <div className="flex items-center gap-3 rounded-2xl border border-success-200 bg-success-soft px-4 py-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-success-500 text-white">
+          <Wifi className="h-5 w-5" />
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-success-foreground">ESP32 connected — streaming live data</p>
+          <p className="text-[11px] text-success-600">
+            Latest reading {ageSec}s ago · {latestTimestamp ? formatTime(latestTimestamp) : "—"}
+          </p>
+        </div>
+        <span className="flex items-center gap-1.5 rounded-full bg-success-500 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
+          <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+          Live
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-warning-200 bg-warning-soft px-4 py-3">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-warning-500 text-white">
+        <WifiOff className="h-5 w-5" />
+      </div>
+      <div className="flex-1">
+        <p className="text-sm font-semibold text-warning-foreground">ESP32 offline — last reading {ageSec}s ago</p>
+        <p className="text-[11px] text-warning-600">
+          Last at {latestTimestamp ? formatTime(latestTimestamp) : "—"} · new data will appear automatically when the device reconnects
+        </p>
+      </div>
+      <span className="flex items-center gap-1.5 rounded-full bg-warning-500 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
+        Offline
+      </span>
+    </div>
+  );
+}
+
+function EspSetupCard() {
+  return (
+    <div className="mt-4 rounded-xl border border-secondary-200 bg-secondary-50 p-4">
+      <p className="text-xs font-semibold text-secondary-700">ESP32 Setup — replace ThingSpeak with the Supabase ingest endpoint</p>
+      <p className="mt-1 text-[11px] text-secondary-400">In your Arduino sketch, change the <code className="font-mono">sendToThingSpeak()</code> function to POST JSON to this URL instead of ThingSpeak:</p>
+      <div className="mt-2 rounded-lg bg-secondary-900 p-3 font-mono text-[11px] text-secondary-100 overflow-x-auto">
+        <div>POST https://dhasmvkonmhmqaerslpo.supabase.co/functions/v1/sensor-ingest</div>
+        <div className="mt-1">Content-Type: application/json</div>
+        <div className="mt-2 text-secondary-400">{"{"}</div>
+        <div className="pl-3 text-secondary-300">"device_id": "NEUROVA-ESP32",</div>
+        <div className="pl-3 text-secondary-300">"temperature": 28.5,</div>
+        <div className="pl-3 text-secondary-300">"humidity": 62.3,</div>
+        <div className="pl-3 text-secondary-300">"vibration_amplitude": 340,</div>
+        <div className="pl-3 text-secondary-300">"vibration_event": false,</div>
+        <div className="pl-3 text-secondary-300">"temperature_warning": false,</div>
+        <div className="pl-3 text-secondary-300">"humidity_warning": true,</div>
+        <div className="pl-3 text-secondary-300">"total_risk": 22.5,</div>
+        <div className="pl-3 text-secondary-300">"risk_alert": false</div>
+        <div className="text-secondary-400">{"}"}</div>
+      </div>
+      <p className="mt-3 text-[11px] text-secondary-400">The endpoint accepts a single object or an array of objects. No API key is required for ingestion.</p>
+    </div>
+  );
+}
+
+function LiveStat({
+  icon,
+  label,
+  value,
+  sub,
+  accent,
+  dimmed,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string | number;
+  sub?: string;
+  accent: "success" | "warning" | "destructive" | "secondary";
+  dimmed?: boolean;
+}) {
+  const accentMap = {
+    success: "text-success-foreground bg-success-soft",
+    warning: "text-warning-foreground bg-warning-soft",
+    destructive: "text-destructive-foreground bg-destructive-soft",
+    secondary: "text-secondary-600 bg-secondary-100",
+  };
+
+  return (
+    <div className={`rounded-2xl border border-secondary-200 bg-white p-4 shadow-sm transition-opacity ${dimmed ? "opacity-60" : ""}`}>
+      <div className={`mb-2 flex h-8 w-8 items-center justify-center rounded-lg ${accentMap[accent]}`}>{icon}</div>
+      <p className="text-xl font-bold tabular-nums text-secondary-900">{value}</p>
+      <p className="text-[11px] text-secondary-400">{label}</p>
+      {sub ? <p className="mt-0.5 text-[10px] text-secondary-300">{sub}</p> : null}
+    </div>
+  );
+}
+
+function MiniChart({
+  values,
+  color,
+  unit,
+  max,
+  threshold,
+  thresholdLabel,
+}: {
+  values: number[];
+  color: string;
+  unit: string;
+  max?: number;
+  threshold?: number;
+  thresholdLabel?: string;
+}) {
+  if (values.length < 2) {
+    return <p className="py-8 text-center text-xs text-secondary-400">Not enough data yet.</p>;
+  }
+
+  const minVal = Math.min(...values);
+  const maxVal = max ?? Math.max(...values);
+  const range = maxVal - minVal || 1;
+  const width = 800;
+  const height = 120;
+
+  const points = values
+    .map((v, i) => {
+      const x = (i / (values.length - 1)) * (width - 40) + 40;
+      const y = height - 20 - ((v - minVal) / range) * (height - 40);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+
+  const thresholdY =
+    threshold !== undefined && threshold >= minVal && threshold <= maxVal
+      ? height - 20 - ((threshold - minVal) / range) * (height - 40)
+      : null;
+
+  return (
+    <div>
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full" preserveAspectRatio="none" style={{ height: "120px" }}>
+        {[0, 0.5, 1].map((p) => (
+          <line key={p} x1={40} y1={10 + p * 90} x2={width} y2={10 + p * 90} stroke="#e2e8f0" strokeWidth={1} />
+        ))}
+        {thresholdY !== null && (
+          <>
+            <line
+              x1={40}
+              y1={thresholdY}
+              x2={width}
+              y2={thresholdY}
+              stroke="#ef4444"
+              strokeWidth={1}
+              strokeDasharray="4 3"
+              opacity={0.5}
+            />
+            <text x={width - 4} y={thresholdY - 3} textAnchor="end" className="fill-destructive-400 text-[9px]">
+              {thresholdLabel}
+            </text>
+          </>
+        )}
+        <polyline points={points} fill="none" stroke={color} strokeWidth={2} vectorEffect="non-scaling-stroke" />
+      </svg>
+      <div className="mt-2 flex justify-between text-[11px] text-secondary-400">
+        <span>min {minVal.toFixed(1)}{unit}</span>
+        <span>max {maxVal.toFixed(1)}{unit}</span>
+      </div>
+    </div>
+  );
+}
+
+function formatTime(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
+
+============================================
+FILE: supabase/config.toml
+============================================
+
+[functions.sensor-ingest]
+verify_jwt = false
+
+
+============================================
+FILE: supabase/functions/sensor-ingest/index.ts
+============================================
+
+import { createClient } from "npm:@supabase/supabase-js@2.57.4";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
+};
+
+const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+interface SensorPayload {
+  device_id?: string;
+  temperature?: number;
+  humidity?: number;
+  vibration_amplitude?: number;
+  vibration_event?: boolean;
+  temperature_warning?: boolean;
+  humidity_warning?: boolean;
+  total_risk?: number;
+  risk_alert?: boolean;
+}
+
+function toBool(v: unknown): boolean {
+  if (typeof v === "boolean") return v;
+  if (typeof v === "number") return v !== 0;
+  if (typeof v === "string") return v === "true" || v === "1";
+  return false;
+}
+
+Deno.serve(async (req: Request) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { status: 200, headers: corsHeaders });
+  }
+
+  if (req.method !== "POST") {
+    return new Response(
+      JSON.stringify({ error: "Method not allowed. Use POST." }),
+      { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
+  }
+
+  try {
+    const body: SensorPayload | SensorPayload[] = await req.json();
+
+    const rows = Array.isArray(body) ? body : [body];
+
+    if (rows.length === 0) {
+      return new Response(
+        JSON.stringify({ error: "Empty payload." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    const inserts = rows.map((row) => {
+      const temperature = row.temperature ?? null;
+      const humidity = row.humidity ?? null;
+      const vibrationAmplitude = row.vibration_amplitude ?? null;
+
+      const TEMP_WARNING = 35.0;
+      const RH_WARNING = 65.0;
+      const RH_HIGH = 75.0;
+      const PIEZO_EVENT_THRESHOLD = 250;
+      const RISK_ALERT_LIMIT = 30.0;
+
+      const temperatureWarning = temperature !== null && temperature > TEMP_WARNING;
+      const humidityWarning = humidity !== null && humidity > RH_WARNING;
+      const humidityHigh = humidity !== null && humidity > RH_HIGH;
+      const vibrationEvent = toBool(row.vibration_event) ||
+        (vibrationAmplitude !== null && vibrationAmplitude >= PIEZO_EVENT_THRESHOLD);
+
+      const espRisk = row.total_risk ?? null;
+      const espAlert = toBool(row.risk_alert);
+      const riskAlert = espAlert || (espRisk !== null && espRisk > RISK_ALERT_LIMIT);
+
+      return {
+        device_id: row.device_id ?? "NEUROVA-ESP32",
+        temperature,
+        humidity,
+        vibration_amplitude: vibrationAmplitude,
+        vibration_event: vibrationEvent,
+        temperature_warning: temperatureWarning,
+        humidity_warning: humidityWarning || humidityHigh,
+        total_risk: espRisk,
+        risk_alert: riskAlert,
+      };
+    });
+
+    const { data, error } = await supabase
+      .from("sensor_readings")
+      .insert(inserts)
+      .select("id, created_at");
+
+    if (error) {
+      return new Response(
+        JSON.stringify({ error: error.message }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, count: data.length, entries: data }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: err.message }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
+  }
+});
+
+
+============================================
+FILE: supabase/migrations/20261014211246_create_sensor_readings.sql
+============================================
+
+/*
+# Create sensor_readings table for live ESP32 data
+
+## Purpose
+Stores live grain-storage sensor readings sent from an ESP32 device
+(NEUROVA Raw Paddy Rice Storage Monitor) via an edge function.
+
+## New Tables
+- `sensor_readings`
+  - `id` (bigserial, primary key)
+  - `device_id` (text, identifies the ESP32 device / sensor node)
+  - `temperature` (real, °C from DHT22)
+  - `humidity` (real, % RH from DHT22)
+  - `vibration_amplitude` (integer, ADC counts from piezo)
+  - `vibration_event` (boolean, true when piezo threshold crossed)
+  - `temperature_warning` (boolean, true when temp > 35°C)
+  - `humidity_warning` (boolean, true when RH > 65%)
+  - `total_risk` (real, combined 0–100 risk score from ESP32)
+  - `risk_alert` (boolean, true when total_risk > 30)
+  - `created_at` (timestamptz, defaults to now())
+
+## Security
+- RLS enabled on `sensor_readings`.
+- This is a single-tenant app with no sign-in screen, so anon + authenticated
+  can read and insert. Updates and deletes are not needed from the frontend.
+*/
+
+CREATE TABLE IF NOT EXISTS sensor_readings (
+  id bigserial PRIMARY KEY,
+  device_id text NOT NULL DEFAULT 'NEUROVA-ESP32',
+  temperature real,
+  humidity real,
+  vibration_amplitude integer,
+  vibration_event boolean DEFAULT false,
+  temperature_warning boolean DEFAULT false,
+  humidity_warning boolean DEFAULT false,
+  total_risk real,
+  risk_alert boolean DEFAULT false,
+  created_at timestamptz DEFAULT now()
+);
+
+ALTER TABLE sensor_readings ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "anon_select_readings" ON sensor_readings;
+CREATE POLICY "anon_select_readings" ON sensor_readings FOR SELECT
+  TO anon, authenticated USING (true);
+
+DROP POLICY IF EXISTS "anon_insert_readings" ON sensor_readings;
+CREATE POLICY "anon_insert_readings" ON sensor_readings FOR INSERT
+  TO anon, authenticated WITH CHECK (true);
+
+CREATE INDEX IF NOT EXISTS idx_sensor_readings_created_at
+  ON sensor_readings (created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_sensor_readings_device
+  ON sensor_readings (device_id, created_at DESC);
+
+
+============================================
+FILE: supabase/migrations/20261015010440_create_get_server_time_function.sql
+============================================
+
+/*
+  Returns the database server's current time so the frontend can
+  compare it against created_at without any browser-clock mismatch.
+*/
+CREATE OR REPLACE FUNCTION get_server_time()
+RETURNS timestamptz
+LANGUAGE sql
+AS $$
+  SELECT now();
+$$;
+
+GRANT EXECUTE ON FUNCTION get_server_time() TO anon, authenticated;
+
+
+============================================
+FILE: supabase/NEUROVA_ESP32_Supabase.ino
+============================================
+
+/*
+ * NEUROVA - RAW PADDY RICE STORAGE MONITOR
+ * ESP32 + DHT22 + PIEZO + SUPABASE
+ * -----------------------------------------------
+ * This version replaces the ThingSpeak upload with
+ * a POST to the Supabase sensor-ingest edge function.
+ *
+ * Hardware: ESP32 + DHT22 on GPIO4 + Piezo on GPIO34
+ * Library:  ArduinoJson by Benoit Blanchon
+ * -----------------------------------------------
+ */
+
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <DHT.h>
+#include <ArduinoJson.h>
+
+// ================== WIFI ==================
+const char* WIFI_SSID     = "VNRVJIET_E";
+const char* WIFI_PASSWORD = "vnrvjiet@123";
+
+// ================== SUPABASE ==================
+const char* SUPABASE_URL =
+    "https://dhasmvkonmhmqaerslpo.supabase.co/functions/v1/sensor-ingest";
+
+// ================== PINS ==================
+#define DHT_PIN   4
+#define DHT_TYPE  DHT22
+#define PIEZO_PIN 34
+
+DHT dht(DHT_PIN, DHT_TYPE);
+
+// ================== RISK THRESHOLDS ==================
+const float TEMP_BASELINE  = 25.0;
+const float TEMP_WARNING   = 35.0;
+const float RH_BASELINE    = 55.0;
+const float RH_WARNING     = 65.0;
+const float RH_HIGH        = 75.0;
+const float RISK_ALERT_LIMIT = 30.0;
+
+const int PIEZO_EVENT_THRESHOLD = 250;
+const int PIEZO_FULL_SCALE      = 1000;
+
+const float W_VIBRATION   = 0.40;
+const float W_HUMIDITY    = 0.30;
+const float W_TEMPERATURE = 0.30;
+
+// ================== TIMING ==================
+const unsigned long DHT_INTERVAL      = 2500;
+const unsigned long PIEZO_INTERVAL    = 100;
+const unsigned long PIEZO_WINDOW_US   = 50000;
+const unsigned long CLOUD_INTERVAL    = 20000;
+const unsigned long WIFI_RETRY        = 10000;
+const unsigned long EVENT_COOLDOWN    = 2000;
+const unsigned long DISPLAY_INTERVAL  = 2500;
+
+// ================== STATE ==================
+float temperature = NAN;
+float humidity    = NAN;
+
+int piezoMinimum       = 0;
+int piezoMaximum       = 0;
+int vibrationAmplitude = 0;
+
+float vibrationRisk   = 0.0;
+float humidityRisk    = 0.0;
+float temperatureRisk = 0.0;
+float totalRisk       = 0.0;
+
+bool environmentValid       = false;
+bool humidityWarning        = false;
+bool temperatureWarning     = false;
+bool riskAlert              = false;
+bool vibrationEventPending  = false;
+
+unsigned long lastDHTRead       = 0;
+unsigned long lastPiezoSample   = 0;
+unsigned long lastCloudUpdate   = 0;
+unsigned long lastWiFiRetry     = 0;
+unsigned long lastVibrationEvent = 0;
+unsigned long lastDisplay       = 0;
+
+// ================== HELPERS ==================
+float clamp100(float v) {
+  if (v < 0.0)  return 0.0;
+  if (v > 100.0) return 100.0;
+  return v;
+}
+
+// ================== WIFI ==================
+void connectWiFi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  unsigned long start = millis();
+  while (WiFi.status() != WL_CONNECTED &&
+         millis() - start < 20000) {
+    delay(500);
+    Serial.print(".");
+  }
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\nWi-Fi connected! IP: ");
+    Serial.println(WiFi.localIP());
+  } else {
+    Serial.println("\nWi-Fi unavailable; will retry.");
+  }
+}
+
+// ================== DHT22 ==================
+void readEnvironment() {
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  if (isnan(h) || isnan(t) ||
+      h < 0.0 || h > 100.0 ||
+      t < -40.0 || t > 80.0) {
+    Serial.println("ERROR: Invalid DHT22 reading.");
+    environmentValid = false;
+    return;
+  }
+  humidity    = h;
+  temperature = t;
+  environmentValid = true;
+  humidityWarning    = humidity > RH_WARNING;
+  temperatureWarning = temperature > TEMP_WARNING;
+}
+
+// ================== PIEZO ==================
+void readPiezo() {
+  int minVal = 4095;
+  int maxVal = 0;
+  unsigned long start = micros();
+  while ((unsigned long)(micros() - start) < PIEZO_WINDOW_US) {
+    int v = analogRead(PIEZO_PIN);
+    if (v < minVal) minVal = v;
+    if (v > maxVal) maxVal = v;
+  }
+  piezoMinimum       = minVal;
+  piezoMaximum       = maxVal;
+  vibrationAmplitude = maxVal - minVal;
+  vibrationRisk = clamp100(
+    (float)vibrationAmplitude * 100.0 / PIEZO_FULL_SCALE);
+
+  unsigned long now = millis();
+  if (vibrationAmplitude >= PIEZO_EVENT_THRESHOLD &&
+      (lastVibrationEvent == 0 ||
+       now - lastVibrationEvent >= EVENT_COOLDOWN)) {
+    lastVibrationEvent    = now;
+    vibrationEventPending = true;
+    Serial.println("VIBRATION EVENT: Threshold crossed.");
+  }
+}
+
+// ================== RISK ==================
+void calculateRisk() {
+  if (!environmentValid) {
+    totalRisk  = NAN;
+    riskAlert  = false;
+    return;
+  }
+  temperatureRisk = clamp100(
+    (temperature - TEMP_BASELINE) /
+    (TEMP_WARNING - TEMP_BASELINE) * 100.0);
+  humidityRisk = clamp100(
+    (humidity - RH_BASELINE) /
+    (RH_HIGH - RH_BASELINE) * 100.0);
+  totalRisk = clamp100(
+    W_VIBRATION * vibrationRisk +
+    W_HUMIDITY * humidityRisk +
+    W_TEMPERATURE * temperatureRisk);
+  riskAlert = totalRisk > RISK_ALERT_LIMIT;
+}
+
+// ================== SERIAL ==================
+void printResults() {
+  Serial.println("\n========== NEUROVA ==========");
+  Serial.println("Material: RAW PADDY RICE");
+  if (environmentValid) {
+    Serial.print("Temperature: ");  Serial.print(temperature, 1); Serial.println(" C");
+    Serial.print("Humidity: ");     Serial.print(humidity, 1);    Serial.println(" %");
+    Serial.print("Risk: ");         Serial.print(totalRisk, 1);   Serial.println(" / 100");
+    Serial.print("Alert: ");        Serial.println(riskAlert ? "ACTIVE" : "CLEAR");
+  } else {
+    Serial.println("ENVIRONMENT: INVALID");
+  }
+  Serial.print("Vibration amp: ");  Serial.print(vibrationAmplitude);
+  Serial.print("  risk: ");         Serial.print(vibrationRisk, 1);
+  Serial.println(" / 100");
+  Serial.println("=============================");
+}
+
+// ================== SUPABASE UPLOAD ==================
+void sendToSupabase() {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Upload skipped: Wi-Fi disconnected.");
+    return;
+  }
+  if (!environmentValid || isnan(totalRisk)) {
+    Serial.println("Upload skipped: invalid sensor data.");
+    return;
+  }
+
+  // Build JSON body with ArduinoJson
+  StaticJsonDocument<256> doc;
+  doc["device_id"]           = "NEUROVA-ESP32";
+  doc["temperature"]         = temperature;
+  doc["humidity"]            = humidity;
+  doc["vibration_amplitude"] = vibrationAmplitude;
+  doc["vibration_event"]     = vibrationEventPending;
+  doc["temperature_warning"] = temperatureWarning;
+  doc["humidity_warning"]    = humidityWarning;
+  doc["total_risk"]          = totalRisk;
+  doc["risk_alert"]          = riskAlert;
+
+  String jsonBody;
+  serializeJson(doc, jsonBody);
+
+  HTTPClient http;
+  http.setConnectTimeout(5000);
+  http.setTimeout(5000);
+
+  http.begin(SUPABASE_URL);
+  http.addHeader("Content-Type", "application/json");
+
+  int code = http.POST(jsonBody);
+
+  if (code == HTTP_CODE_OK) {
+    String resp = http.getString();
+    Serial.print("Supabase upload OK. Entry: ");
+    Serial.println(resp);
+    vibrationEventPending = false;
+  } else {
+    Serial.print("Supabase upload failed. HTTP code: ");
+    Serial.println(code);
+  }
+
+  http.end();
+}
+
+// ================== SETUP ==================
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+  Serial.println("\n================================");
+  Serial.println("NEUROVA - RAW PADDY MONITOR");
+  Serial.println("ESP32 + DHT22 + PIEZO + SUPABASE");
+  Serial.println("================================");
+
+  analogReadResolution(12);
+  analogSetPinAttenuation(PIEZO_PIN, ADC_11db);
+  pinMode(PIEZO_PIN, INPUT);
+
+  dht.begin();
+  connectWiFi();
+
+  lastDHTRead     = millis() - DHT_INTERVAL;
+  lastPiezoSample = millis() - PIEZO_INTERVAL;
+  lastCloudUpdate = millis() - CLOUD_INTERVAL;
+  lastDisplay     = millis();
+}
+
+// ================== LOOP ==================
+void loop() {
+  unsigned long now = millis();
+
+  if (WiFi.status() != WL_CONNECTED &&
+      now - lastWiFiRetry >= WIFI_RETRY) {
+    lastWiFiRetry = now;
+    Serial.println("Retrying Wi-Fi...");
+    WiFi.reconnect();
+  }
+
+  if (now - lastDHTRead >= DHT_INTERVAL) {
+    lastDHTRead = now;
+    readEnvironment();
+  }
+
+  now = millis();
+  if (now - lastPiezoSample >= PIEZO_INTERVAL) {
+    lastPiezoSample = now;
+    readPiezo();
+  }
+
+  calculateRisk();
+
+  now = millis();
+  if (now - lastDisplay >= DISPLAY_INTERVAL) {
+    lastDisplay = now;
+    printResults();
+  }
+
+  now = millis();
+  if (now - lastCloudUpdate >= CLOUD_INTERVAL) {
+    lastCloudUpdate = now;
+    sendToSupabase();
+  }
+
+  delay(10);
+}
+
